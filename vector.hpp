@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/05 11:01:38 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/09/22 12:27:24 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/09/22 13:02:28 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,9 @@ namespace ft
         {
             if (n < this->_size)
             {
-                this->_size = n;
                 for (int i = n; i < this->_size; i++)
                     this->_arr[i].~value_type();
+                this->_size = n;
             }
             else if (n > this->_size)
             {
@@ -67,9 +67,9 @@ namespace ft
                 }
                 else
                 {
-                    this->_size = n;
-                    for (int i = this->_size; i < this->_capacity; i++)
+                    for (int i = this->_size; i < n; i++)
                         this->_arr[i] = val;
+                    this->_size = n;
                 }
             }
         }
