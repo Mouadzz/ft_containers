@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 11:07:30 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/09/23 12:22:20 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/09/25 12:17:50 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,24 @@
 
 int main()
 {
-    ft::vector<int> obj(3);
+  ft::vector<int> myvector;
+  myvector.push_back (100);
+  myvector.push_back (200);
+  myvector.push_back (300);
 
-    obj[0] = 1;
-    obj[1] = 2;
-    obj[2] = 3;
-    std::cout << "size --> " << obj.size() << std::endl;
-    std::cout << "capacity --> " << obj.capacity() << std::endl;
-    std::cout << "max size --> " << obj.max_size() << std::endl;
+  std::cout << "myvector contains:";
+  for (unsigned i=0; i<myvector.size(); i++)
+    std::cout << ' ' << myvector[i];
+  std::cout << '\n';
 
-    std::cout << obj.front() << std::endl;
-    std::cout << obj.back() << std::endl;
+  myvector.clear();
+  myvector.push_back (1101);
+  myvector.push_back (2202);
+
+  std::cout << "myvector contains:";
+  for (unsigned i=0; i<myvector.size(); i++)
+    std::cout << ' ' << myvector[i];
+  std::cout << '\n';
+
+  return 0;
 }
