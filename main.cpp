@@ -12,27 +12,43 @@
 
 #include "vector.hpp"
 #include <iostream>
+#include <vector>
 
 int main()
 {
-  ft::vector<int> myvector;
-  myvector.push_back (100);
-  myvector.push_back (200);
-  myvector.push_back (300);
+  ft::vector<int> foo(3, 199); // three ints with a value of 100
+  ft::vector<int> bar(3, 200); // two ints with a value of 200
 
-  std::cout << "myvector contains:";
-  for (unsigned i=0; i<myvector.size(); i++)
-    std::cout << ' ' << myvector[i];
-  std::cout << '\n';
+  if (foo == bar)
+    std::cout << "foo and bar are equal\n";
+  if (foo != bar)
+    std::cout << "foo and bar are not equal\n";
+  if (foo < bar)
+    std::cout << "foo is less than bar\n";
+  if (foo > bar)
+    std::cout << "foo is greater than bar\n";
+  if (foo <= bar)
+    std::cout << "foo is less than or equal to bar\n";
+  if (foo >= bar)
+    std::cout << "foo is greater than or equal to bar\n";
 
-  myvector.clear();
-  myvector.push_back (1101);
-  myvector.push_back (2202);
+  std::cout << "--------------------------------------------\n";
 
-  std::cout << "myvector contains:";
-  for (unsigned i=0; i<myvector.size(); i++)
-    std::cout << ' ' << myvector[i];
-  std::cout << '\n';
+  std::vector<int> foof(3, 199); // three ints with a value of 100
+  std::vector<int> barr(3, 200); // two ints with a value of 200
+
+  if (foof == barr)
+    std::cout << "foo and bar are equal\n";
+  if (foof != barr)
+    std::cout << "foo and bar are not equal\n";
+  if (foof < barr)
+    std::cout << "foo is less than bar\n";
+  if (foof > barr)
+    std::cout << "foo is greater than bar\n";
+  if (foof <= barr)
+    std::cout << "foo is less than or equal to bar\n";
+  if (foof >= barr)
+    std::cout << "foo is greater than or equal to bar\n";
 
   return 0;
 }

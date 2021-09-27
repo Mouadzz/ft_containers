@@ -315,11 +315,109 @@ namespace ft
 
         /*----------------[ MODIFIERS ]----------------*/
 
+        /*----------------[ ALLOCATOR ]----------------*/
+
+        // Returns a copy of the allocator object associated with the vector.
+        allocator_type get_allocator() const { return this->_allocator; }
+
+        /*----------------[ ALLOCATOR ]----------------*/
+
     private:
         value_type *_arr;
         size_type _size;
         size_type _capacity;
         allocator_type _allocator;
     };
+
+    /*----------------[ NON-MEMBER FUNCTION OVERLOADS ]----------------*/
+
+    // The contents of container x are exchanged with those of y. Both container objects must be of the same type (same template parameters), although sizes may differ.
+    template <class T, class Alloc>
+    void swap(vector<T, Alloc> &x, vector<T, Alloc> &y) { x.swap(y); }
+
+    //Performs the appropriate comparison operation between the vector containers lhs and rhs.
+    template <class T, class Alloc>
+    bool operator==(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
+    {
+        if (lhs.size() == rhs.size())
+        {
+            for (int i = 0; i < lhs.size(); i++)
+            {
+                if (lhs[i] != rhs[i])
+                    return false;
+            }
+        }
+        else
+            return false;
+        return true;
+    }
+
+    template <class T, class Alloc>
+    bool operator!=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
+    {
+        if (lhs.size() == rhs.size())
+        {
+            for (int i = 0; i < lhs.size(); i++)
+            {
+                if (lhs[i] != rhs[i])
+                    return true;
+            }
+        }
+        else
+            return true;
+        return false;
+    }
+
+    template <class T, class Alloc>
+    bool operator<(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
+    {
+        if (lhs == rhs)
+            return false;
+        else
+        {
+            for (int i = 0; i < ((lhs.size() < rhs.size()) ? lhs.size() : rhs.size()); i++)
+            {
+                if (lhs[i] > rhs[i])
+                    return false;
+                else if (lhs[i] < rhs[i])
+                    return true;
+            }
+            return (lhs.size() < rhs.size()) ? true : false;
+        }
+        return false;
+    }
+
+    template <class T, class Alloc>
+    bool operator<=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
+    {
+        return (lhs < rhs || lhs == rhs) ? true : false;
+    }
+
+    template <class T, class Alloc>
+    bool operator>(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
+    {
+        if (lhs == rhs)
+            return false;
+        else
+        {
+            for (int i = 0; i < ((lhs.size() < rhs.size()) ? lhs.size() : rhs.size()); i++)
+            {
+                if (lhs[i] < rhs[i])
+                    return false;
+                else if (lhs[i] > rhs[i])
+                    return true;
+            }
+            return (lhs.size() > rhs.size()) ? true : false;
+        }
+        return false;
+    }
+
+    template <class T, class Alloc>
+    bool operator>=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
+    {
+        return (lhs > rhs || lhs == rhs) ? true : false;
+    }
+
+    /*----------------[ NON-MEMBER FUNCTION OVERLOADS ]----------------*/
 
 }
