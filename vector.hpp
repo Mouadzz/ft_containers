@@ -420,4 +420,51 @@ namespace ft
 
     /*----------------[ NON-MEMBER FUNCTION OVERLOADS ]----------------*/
 
+    /*----------------[ ITERATOR ]----------------*/
+
+    template <class Category, class T, class Distance = ptrdiff_t,
+              class Pointer = T *, class Reference = T &>
+    struct iterator
+    {
+        typedef T value_type;
+        typedef Distance difference_type;
+        typedef Pointer pointer;
+        typedef Reference reference;
+        typedef Category iterator_category;
+    };
+
+    template <class T>
+    class m_iterator : public ft::iterator<std::random_access_iterator_tag, T>
+    {
+        typedef typename ft::iterator<std::random_access_iterator_tag, T>::pointer pointer;
+
+    private:
+        pointer _it;
+        size_t _size;
+
+    public:
+        m_iterator() : _size(0), _it(nullptr) {}
+
+        m_iterator(T *arr, size_t size)
+        {
+            this->_it = arr;
+            this->_size = size;
+        }
+
+        m_iterator(m_iterator &copy)
+        {
+            this->_it = copy._it;
+            this->_size = copy._size;
+        }
+
+        m_iterator &operator=(m_iterator &copy)
+        {
+            this->_it = copy._it;
+            this->_size = copy._size;
+            return *this;
+        }
+    };
+
+    /*----------------[ ITERATOR ]----------------*/
+
 }
