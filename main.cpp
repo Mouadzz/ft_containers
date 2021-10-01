@@ -16,7 +16,7 @@
 
 int main()
 {
-  ft::vector<int> foo(3, 199); // three ints with a value of 100
+  ft::vector<int> foo(5, 200); // three ints with a value of 100
   ft::vector<int> bar(3, 200); // two ints with a value of 200
 
   if (foo == bar)
@@ -34,7 +34,7 @@ int main()
 
   std::cout << "--------------------------------------------\n";
 
-  std::vector<int> foof(3, 199); // three ints with a value of 100
+  std::vector<int> foof(3, 200); // three ints with a value of 100
   std::vector<int> barr(3, 200); // two ints with a value of 200
 
   if (foof == barr)
