@@ -463,6 +463,31 @@ namespace ft
             this->_size = copy._size;
             return *this;
         }
+
+        bool operator==(m_iterator &copy)
+        {
+            return (this->_it == copy._it) ? true : false;
+        }
+
+        bool operator!=(m_iterator &copy)
+        {
+            return (this->_it != copy._it) ? true : false;
+        }
+
+        T operator*()
+        {
+            return *this->_it;
+        }
+
+        T operator->(){}
+
+        T operator=(T &value)
+        {
+            *this->_it = value;
+            return *this->_it;
+        }
+
+        ~m_iterator() {}
     };
 
     /*----------------[ ITERATOR ]----------------*/
