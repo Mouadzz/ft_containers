@@ -474,21 +474,102 @@ namespace ft
             return (this->_it != copy._it) ? true : false;
         }
 
-        T operator*()
+        T &operator*()
         {
-            return *this->_it;
+            return this->*_it;
         }
 
-        T operator->(){}
-
-        T operator=(T &value)
+        T &operator->()
         {
-            *this->_it = value;
-            return *this->_it;
+            return this->_it;
+        }
+
+        T &operator=(T &value)
+        {
+            this->*_it = value;
+            return this->*_it;
+        }
+
+        T operator++(int)
+        {
+            pointer tmp = this->_it;
+            ++this->_it;
+            return tmp;
+        }
+
+        T &operator++()
+        {
+            ++this->_it;
+            return this->_it;
+        }
+
+        T operator--(int)
+        {
+            pointer tmp = this->_it;
+            --this->_it;
+            return tmp;
+        }
+
+        T &operator--()
+        {
+            --this->_it;
+            return this->_it;
+        }
+
+        T &operator+(T &n)
+        {
+            pointer tmp = this->_it + n;
+            return tmp;
+        }
+
+        T &operator-(T &n)
+        {
+            pointer tmp = this->_it - n;
+            return tmp;
+        }
+
+        T &operator-(m_iterator &copy)
+        {
+            return this->_it - copy._it;
+        }
+
+        bool operator<(m_iterator &copy)
+        {
+            return (this->_it < copy._it) ? true : false;
+        }
+
+        bool operator>(m_iterator &copy)
+        {
+            return (this->_it > copy._it) ? true : false;
+        }
+        bool operator<=(m_iterator &copy)
+        {
+            return (this->_it <= copy._it) ? true : false;
+        }
+        bool operator>=(m_iterator &copy)
+        {
+            return (this->_it >= copy._it) ? true : false;
+        }
+
+        T &operator+=(T &n)
+        {
+            return this->_it += n;
+        }
+
+        T &operator-=(T &n)
+        {
+            return this->_it -= n;
+        }
+
+        T &operator[](T &n)
+        {
+            return this->_it[n];
         }
 
         ~m_iterator() {}
     };
+
+    // n + a
 
     /*----------------[ ITERATOR ]----------------*/
 
