@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/05 10:32:21 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/05 14:33:11 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/05 15:02:33 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,11 @@ namespace ft
             this->_it = copy._it;
             this->_pos = copy._pos;
             return *this;
+        }
+
+        pointer get_pointer()
+        {
+            return this->_it;
         }
 
         bool operator==(const m_iterator &copy)
@@ -160,17 +165,15 @@ namespace ft
     };
     
     template <class T>
-    ft::m_iterator<T> operator-(const m_iterator<T> &x, const m_iterator<T> &y)
+    size_t operator-( m_iterator<T> &x,  m_iterator<T> &y)
     {
-        ft::m_iterator<T> tmp;
-        tmp->_it = x->_it - x->_it;
-        return tmp;
+        return x.get_pointer() - y.get_pointer();
     }
 
     template <class T>
     ft::m_iterator<T> operator+(const T &n, const m_iterator<T> &y)
     {
-        ft::m_iterator<T> tmp;
+        ft::m_iterator<T> tmp(y);
         return tmp += n;
     }
 }
