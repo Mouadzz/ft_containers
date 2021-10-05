@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 11:07:30 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/05 14:33:54 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/05 15:02:40 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,6 +199,11 @@ int main()
   real_res = c_real_it + 1;
   std::cout << *real_res << std::endl;
 
+  real_res =  1 + c_real_it;
+  std::cout << *real_res << std::endl;
+
+  std::cout << real_it - c_real_it << std::endl;
+
   std::cout << "------------------------------------------\n";
 
   ft::vector<int> my_vector;
@@ -255,6 +260,10 @@ int main()
   std::cout << *my_res << std::endl;
   my_res = c_my_it + 1;
   std::cout << *my_res << std::endl;
+
+  my_res =  1 + c_my_it;
+  std::cout << *my_res << std::endl;
+  std::cout << my_it - c_my_it << std::endl;
 
   return 0;
 }
