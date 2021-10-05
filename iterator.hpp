@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/05 10:32:21 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/05 13:12:43 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/05 13:27:51 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,6 +158,19 @@ namespace ft
 
         ~m_iterator() {}
     };
+    
+    template <class T>
+    ft::m_iterator<T> operator-(const m_iterator<T> &x, const m_iterator<T> &y)
+    {
+        ft::m_iterator<T> tmp;
+        tmp->_it = x->_it - x->_it;
+        return tmp;
+    }
 
-    // n + a
+    template <class T>
+    ft::m_iterator<T> operator+(const T &n, const m_iterator<T> &y)
+    {
+        ft::m_iterator<T> tmp;
+        return tmp += n;
+    }
 }
