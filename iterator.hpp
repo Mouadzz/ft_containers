@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/05 10:32:21 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/05 13:08:37 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/05 13:12:43 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ namespace ft
             return *this;
         }
 
-        m_iterator &operator+( T &n)
+        m_iterator &operator+(const T &n)
         {
            m_iterator tmp(*this);
 

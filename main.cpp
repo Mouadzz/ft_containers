@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 11:07:30 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/05 12:39:48 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/05 13:12:17 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -251,9 +251,9 @@ int main()
   std::cout << *c_my_it << std::endl;
   std::cout << c_my_it[0] << std::endl;
 
-  ft::vector<int>::iterator my_res = c_my_it + 4;
+  ft::vector<int>::iterator my_res = c_my_it - 4;
   std::cout << *my_res << std::endl;
-  my_res = c_my_it - 1;
+  my_res = c_my_it + 1;
   std::cout << *my_res << std::endl;
 
   return 0;
