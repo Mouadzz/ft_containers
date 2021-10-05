@@ -6,13 +6,14 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/05 11:01:38 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/09/25 12:21:13 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/05 11:41:04 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <memory>
 #include <math.h>
 #include <iostream>
+#include "iterator.hpp"
 
 namespace ft
 {
@@ -27,6 +28,8 @@ namespace ft
         typedef const T &const_reference;
         typedef Alloc allocator_type;
         typedef size_t size_type;
+        typedef ft::m_iterator<T> iterator;
+        typedef ft::m_iterator<const T> const_iterator;
 
         /*----------------[ MEMBER TYPES ]----------------*/
 
@@ -69,6 +72,24 @@ namespace ft
         }
 
         /*----------------[ CONSTRUCTORS ]----------------*/
+
+        /*----------------[ ITERATOR FUNCTIONS ]----------------*/
+
+        // Returns an iterator pointing to the first element in the vector.
+        iterator begin()
+        {
+            iterator it(this->_arr, 0);
+            return it;
+        }
+
+        // Returns an iterator referring to the past-the-end element in the vector container.
+        iterator end()
+        {
+            iterator it(this->_arr, this->_size);
+            return it;
+        }
+
+        /*----------------[ ITERATOR FUNCTIONS ]----------------*/
 
         /*----------------[ CAPACITY FUNCTIONS ]----------------*/
 
@@ -135,7 +156,8 @@ namespace ft
                 value_type *tmp = this->_allocator.allocate(n);
                 for (int i = 0; i < this->_size; i++)
                     tmp[i] = this->_arr[i];
-                this->_allocator.deallocate(this->_arr, this->_capacity);
+                if (this->_size > 0)
+                    this->_allocator.deallocate(this->_arr, this->_capacity);
                 this->_arr = tmp;
                 this->_capacity = n;
             }
@@ -238,9 +260,7 @@ namespace ft
                 this->_arr[this->_size] = val;
             }
             else
-            {
                 this->_arr[this->_size] = val;
-            }
             this->_size += 1;
         }
 
@@ -419,158 +439,5 @@ namespace ft
     }
 
     /*----------------[ NON-MEMBER FUNCTION OVERLOADS ]----------------*/
-
-    /*----------------[ ITERATOR ]----------------*/
-
-    template <class Category, class T, class Distance = ptrdiff_t,
-              class Pointer = T *, class Reference = T &>
-    struct iterator
-    {
-        typedef T value_type;
-        typedef Distance difference_type;
-        typedef Pointer pointer;
-        typedef Reference reference;
-        typedef Category iterator_category;
-    };
-
-    template <class T>
-    class m_iterator : public ft::iterator<std::random_access_iterator_tag, T>
-    {
-        typedef typename ft::iterator<std::random_access_iterator_tag, T>::pointer pointer;
-
-    private:
-        pointer _it;
-        size_t _size;
-
-    public:
-        m_iterator() : _size(0), _it(nullptr) {}
-
-        m_iterator(T *arr, size_t size)
-        {
-            this->_it = arr;
-            this->_size = size;
-        }
-
-        m_iterator(m_iterator &copy)
-        {
-            this->_it = copy._it;
-            this->_size = copy._size;
-        }
-
-        m_iterator &operator=(m_iterator &copy)
-        {
-            this->_it = copy._it;
-            this->_size = copy._size;
-            return *this;
-        }
-
-        bool operator==(m_iterator &copy)
-        {
-            return (this->_it == copy._it) ? true : false;
-        }
-
-        bool operator!=(m_iterator &copy)
-        {
-            return (this->_it != copy._it) ? true : false;
-        }
-
-        T &operator*()
-        {
-            return this->*_it;
-        }
-
-        T &operator->()
-        {
-            return this->_it;
-        }
-
-        T &operator=(T &value)
-        {
-            this->*_it = value;
-            return this->*_it;
-        }
-
-        T operator++(int)
-        {
-            pointer tmp = this->_it;
-            ++this->_it;
-            return tmp;
-        }
-
-        T &operator++()
-        {
-            ++this->_it;
-            return this->_it;
-        }
-
-        T operator--(int)
-        {
-            pointer tmp = this->_it;
-            --this->_it;
-            return tmp;
-        }
-
-        T &operator--()
-        {
-            --this->_it;
-            return this->_it;
-        }
-
-        T &operator+(T &n)
-        {
-            pointer tmp = this->_it + n;
-            return tmp;
-        }
-
-        T &operator-(T &n)
-        {
-            pointer tmp = this->_it - n;
-            return tmp;
-        }
-
-        T &operator-(m_iterator &copy)
-        {
-            return this->_it - copy._it;
-        }
-
-        bool operator<(m_iterator &copy)
-        {
-            return (this->_it < copy._it) ? true : false;
-        }
-
-        bool operator>(m_iterator &copy)
-        {
-            return (this->_it > copy._it) ? true : false;
-        }
-        bool operator<=(m_iterator &copy)
-        {
-            return (this->_it <= copy._it) ? true : false;
-        }
-        bool operator>=(m_iterator &copy)
-        {
-            return (this->_it >= copy._it) ? true : false;
-        }
-
-        T &operator+=(T &n)
-        {
-            return this->_it += n;
-        }
-
-        T &operator-=(T &n)
-        {
-            return this->_it -= n;
-        }
-
-        T &operator[](T &n)
-        {
-            return this->_it[n];
-        }
-
-        ~m_iterator() {}
-    };
-
-    // n + a
-
-    /*----------------[ ITERATOR ]----------------*/
 
 }
