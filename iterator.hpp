@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/05 10:32:21 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/05 15:02:33 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/06 12:09:55 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ namespace ft
     class m_iterator : public ft::iterator<std::random_access_iterator_tag, T>
     {
         typedef typename ft::iterator<std::random_access_iterator_tag, T>::pointer pointer;
+        typedef typename ft::iterator<std::random_access_iterator_tag, T>::difference_type difference_type;
 
     private:
         pointer _it;
@@ -52,11 +53,6 @@ namespace ft
             this->_it = copy._it;
             this->_pos = copy._pos;
             return *this;
-        }
-
-        pointer get_pointer()
-        {
-            return this->_it;
         }
 
         bool operator==(const m_iterator &copy)
@@ -113,7 +109,7 @@ namespace ft
 
         m_iterator &operator+(const T &n)
         {
-           m_iterator tmp(*this);
+            m_iterator tmp(*this);
 
             return tmp += n;
         }
@@ -122,6 +118,28 @@ namespace ft
         {
             m_iterator tmp(*this);
             return tmp -= n;
+        }
+
+        difference_type operator-(m_iterator &copy)
+        {
+            difference_type result = 0;
+            m_iterator first(copy);
+            m_iterator last(*this);
+
+            while (first != last)
+            {
+                if (first < last)
+                {
+                    ++first;
+                    ++result;
+                }
+                else if (first > last)
+                {
+                    --first;
+                    --result;
+                }
+            }
+            return result;
         }
 
         bool operator<(const m_iterator &copy)
@@ -163,17 +181,12 @@ namespace ft
 
         ~m_iterator() {}
     };
-    
-    template <class T>
-    size_t operator-( m_iterator<T> &x,  m_iterator<T> &y)
-    {
-        return x.get_pointer() - y.get_pointer();
-    }
 
     template <class T>
     ft::m_iterator<T> operator+(const T &n, const m_iterator<T> &y)
     {
-        ft::m_iterator<T> tmp(y);
-        return tmp += n;
+        m_iterator<T> tmp(y);
+        tmp += n;
+        return tmp;
     }
 }

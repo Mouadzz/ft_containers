@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 11:07:30 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/05 15:02:40 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/06 13:38:58 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,14 @@
 #include <signal.h>
 #include <sys/time.h>
 
-#define BLUE "\e[0;34m"
-#define RED "\e[0;31m"
-#define GREEN "\e[0;32m"
-#define YELLOW "\e[1;33m"
-#define RESET "\e[0m"
+// #define BLUE "\e[0;34m"
+// #define RED "\e[0;31m"
+// #define GREEN "\e[0;32m"
+// #define YELLOW "\e[1;33m"
+// #define RESET "\e[0m"
 
-#define EQUAL(x) ((x) ? (std::cout << "\033[1;32mAC\033[0m\n") : (std::cout << "\033[1;31mWA\033[0m\n"))
-#define TIME_FAC 3 // the ft::vector methods can be slower up to std::vector methods * TIME_FAC (MAX 20)
+// #define EQUAL(x) ((x) ? (std::cout << "\033[1;32mAC\033[0m\n") : (std::cout << "\033[1;31mWA\033[0m\n"))
+// #define TIME_FAC 3 // the ft::vector methods can be slower up to std::vector methods * TIME_FAC (MAX 20)
 
 // void iterator_tests(void)
 // {
@@ -143,127 +143,21 @@ int main()
   // signal(SIGALRM, alarm_handler);
   // // iterator_tests();
 
-  std::vector<int> real_vector;
-  for (int i = 1; i <= 5; i++)
-    real_vector.push_back(i);
+  // constructors used in the same order as described above:
+  // ft::vector<int> first;                               // empty vector of ints
+  ft::vector<int> second(4, 100);                      // four ints with value 100
+  ft::vector<int> third(second.begin(), second.end()); // iterating through second
+  // ft::vector<int> fourth(third);                       // a copy of third
 
-  std::cout << "real_vector contains :";
-  for (std::vector<int>::iterator it = real_vector.begin(); it != real_vector.end(); ++it)
-    std::cout << ' ' << *it;
-  std::cout << '\n';
 
-  std::vector<int>::iterator real_it = real_vector.end();
-  --real_it;
-  std::cout << *real_it << std::endl;
-  std::cout << *real_it++ << std::endl;
-  std::cout << *real_it << std::endl;
-  --real_it;
-  std::cout << *--real_it << std::endl;
-  std::cout << *real_it-- << std::endl;
-  std::cout << *real_it << std::endl;
+  // // the iterator constructor can also be used to construct from arrays:
+  // int myints[] = {16, 2, 77, 29};
+  // ft::vector<int> fifth(myints, myints + sizeof(myints) / sizeof(int));
 
-  std::vector<int>::iterator c_real_it = real_vector.begin();
-
-  if (c_real_it == real_it)
-    std::cout << "equal \n";
-
-  if (c_real_it != real_it)
-    std::cout << "unequal \n";
-
-  if (c_real_it > real_it)
-    std::cout << "copy > real \n";
-
-  if (c_real_it < real_it)
-    std::cout << "copy < real \n";
-
-  if (c_real_it >= real_it)
-    std::cout << "copy >= real \n";
-
-  if (c_real_it <= real_it)
-    std::cout << "copy <= real \n";
-
-  *c_real_it = 696;
-
-  c_real_it += 3;
-
-  std::cout << *c_real_it << std::endl;
-
-  c_real_it -= 2;
-
-  std::cout << *c_real_it << std::endl;
-
-  std::cout << c_real_it[0] << std::endl;
-
-  std::vector<int>::iterator real_res = c_real_it - 4;
-  std::cout << *real_res << std::endl;
-  real_res = c_real_it + 1;
-  std::cout << *real_res << std::endl;
-
-  real_res =  1 + c_real_it;
-  std::cout << *real_res << std::endl;
-
-  std::cout << real_it - c_real_it << std::endl;
-
-  std::cout << "------------------------------------------\n";
-
-  ft::vector<int> my_vector;
-  for (int i = 1; i <= 5; i++)
-    my_vector.push_back(i);
-
-  std::cout << "my_vector contains   :";
-  for (ft::vector<int>::iterator it = my_vector.begin(); it != my_vector.end(); ++it)
-    std::cout << ' ' << *it;
-  std::cout << '\n';
-
-  ft::vector<int>::iterator my_it = my_vector.end();
-  --my_it;
-  std::cout << *my_it << std::endl;
-  std::cout << *my_it++ << std::endl;
-  std::cout << *my_it << std::endl;
-  --my_it;
-  std::cout << *--my_it << std::endl;
-  std::cout << *my_it-- << std::endl;
-  std::cout << *my_it << std::endl;
-
-  ft::vector<int>::iterator c_my_it = my_vector.begin();
-
-  if (c_my_it == my_it)
-    std::cout << "equal \n";
-
-  if (c_my_it != my_it)
-    std::cout << "unequal \n";
-
-  if (c_my_it > my_it)
-    std::cout << "copy > real \n";
-
-  if (c_my_it < my_it)
-    std::cout << "copy < real \n";
-
-  if (c_my_it >= my_it)
-    std::cout << "copy >= real \n";
-
-  if (c_my_it <= my_it)
-    std::cout << "copy <= real \n";
-
-  *c_my_it = 696;
-
-  c_my_it += 3;
-
-  std::cout << *c_my_it << std::endl;
-
-  c_my_it -= 2;
-
-  std::cout << *c_my_it << std::endl;
-  std::cout << c_my_it[0] << std::endl;
-
-  ft::vector<int>::iterator my_res = c_my_it - 4;
-  std::cout << *my_res << std::endl;
-  my_res = c_my_it + 1;
-  std::cout << *my_res << std::endl;
-
-  my_res =  1 + c_my_it;
-  std::cout << *my_res << std::endl;
-  std::cout << my_it - c_my_it << std::endl;
+  // std::cout << "The contents of fifth are:";
+  // for (ft::vector<int>::iterator it = fifth.begin(); it != fifth.end(); ++it)
+  //   std::cout << ' ' << *it;
+  // std::cout << '\n';
 
   return 0;
 }

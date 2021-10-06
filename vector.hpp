@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/05 11:01:38 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/05 11:41:04 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/06 13:39:09 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,11 @@ namespace ft
                 _arr[i] = val;
         }
 
+        template <class InputIterator>
+        vector(InputIterator first, InputIterator last, const allocator_type &alloc = allocator_type(), typename std::enable_if<!std::is_integral<InputIterator>::value>::type = false)
+        {
+            std::cout << "hehe\n";
+        }
         /*----------------[ CONSTRUCTORS ]----------------*/
 
         /*----------------[ ITERATOR FUNCTIONS ]----------------*/
