@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/05 11:01:38 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/06 13:39:09 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/06 14:52:53 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ namespace ft
         explicit vector(size_type n, const value_type &val = value_type(),
                         const allocator_type &alloc = allocator_type())
         {
+            std::cout << "hehe222\n";
             this->_capacity = n;
             this->_size = n;
             this->_arr = this->_allocator.allocate(n);
@@ -72,7 +73,7 @@ namespace ft
         }
 
         template <class InputIterator>
-        vector(InputIterator first, InputIterator last, const allocator_type &alloc = allocator_type(), typename std::enable_if<!std::is_integral<InputIterator>::value>::type = false)
+        vector(InputIterator first, InputIterator last, const allocator_type &alloc = allocator_type(), typename std::enable_if<!std::is_integral<InputIterator>::value, InputIterator>::type = InputIterator())
         {
             std::cout << "hehe\n";
         }
