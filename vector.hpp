@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/05 11:01:38 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/06 14:52:53 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/07 13:34:28 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <math.h>
 #include <iostream>
 #include "iterator.hpp"
+#include "utils.hpp"
 
 namespace ft
 {
@@ -49,7 +50,7 @@ namespace ft
         public:
             virtual const char *what() const throw()
             {
-                return "Size requested is greater than the maximum size !";
+                return "Size requested is negative or  greater than the maximum size !";
             }
         };
 
@@ -64,7 +65,6 @@ namespace ft
         explicit vector(size_type n, const value_type &val = value_type(),
                         const allocator_type &alloc = allocator_type())
         {
-            std::cout << "hehe222\n";
             this->_capacity = n;
             this->_size = n;
             this->_arr = this->_allocator.allocate(n);
@@ -73,10 +73,29 @@ namespace ft
         }
 
         template <class InputIterator>
-        vector(InputIterator first, InputIterator last, const allocator_type &alloc = allocator_type(), typename std::enable_if<!std::is_integral<InputIterator>::value, InputIterator>::type = InputIterator())
+        vector(InputIterator first, InputIterator last, const allocator_type &alloc = allocator_type(), typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator())
         {
-            std::cout << "hehe\n";
+            int range = last - first;
+            if (range < 0)
+                throw length_error();
+            else
+            {
+                this->_capacity = range;
+                this->_size = 0;
+                this->_arr = this->_allocator.allocate(range);
+                for (InputIterator i = first; i != last; i++)
+                    this->push_back(*i);
+            }
         }
+
+        vector(const vector &x)
+        {
+            this->_arr = x._arr;
+            this->_size = x._size;
+            this->_capacity = x._capacity;
+            this->_allocator = x._allocator;
+        }
+
         /*----------------[ CONSTRUCTORS ]----------------*/
 
         /*----------------[ ITERATOR FUNCTIONS ]----------------*/
@@ -108,6 +127,7 @@ namespace ft
         // Resizes the container so that it contains n elements.
         void resize(size_type n, value_type val = value_type())
         {
+
             if (n < this->_size)
             {
                 for (int i = n; i < this->_size; i++)
@@ -260,6 +280,7 @@ namespace ft
         // Adds a new element at the end of the vector, after its current last element. The content of val is copied (or moved) to the new element.
         void push_back(const value_type &val)
         {
+
             if (this->_size + 1 > this->_capacity)
             {
                 reserve(this->_capacity + 1);
@@ -308,6 +329,7 @@ namespace ft
         // Exchanges the content of the container by the content of x, which is another vector object of the same type. Sizes may differ.
         void swap(vector &x)
         {
+
             value_type *tmp = this->_allocator.allocate(this->_capacity);
             for (int i = 0; i < this->_size; i++)
                 tmp[i] = this->_arr[i];
@@ -359,12 +381,16 @@ namespace ft
 
     // The contents of container x are exchanged with those of y. Both container objects must be of the same type (same template parameters), although sizes may differ.
     template <class T, class Alloc>
-    void swap(vector<T, Alloc> &x, vector<T, Alloc> &y) { x.swap(y); }
+    void swap(vector<T, Alloc> &x, vector<T, Alloc> &y)
+    {
+        x.swap(y);
+    }
 
     //Performs the appropriate comparison operation between the vector containers lhs and rhs.
     template <class T, class Alloc>
     bool operator==(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
     {
+
         if (lhs.size() == rhs.size())
         {
             for (int i = 0; i < lhs.size(); i++)
@@ -381,6 +407,7 @@ namespace ft
     template <class T, class Alloc>
     bool operator!=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
     {
+
         if (lhs.size() == rhs.size())
         {
             for (int i = 0; i < lhs.size(); i++)
@@ -397,6 +424,7 @@ namespace ft
     template <class T, class Alloc>
     bool operator<(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
     {
+
         if (lhs == rhs)
             return false;
         else
@@ -422,6 +450,7 @@ namespace ft
     template <class T, class Alloc>
     bool operator>(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
     {
+
         if (lhs == rhs)
             return false;
         else
@@ -441,6 +470,7 @@ namespace ft
     template <class T, class Alloc>
     bool operator>=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
     {
+
         return (lhs > rhs || lhs == rhs) ? true : false;
     }
 

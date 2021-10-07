@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 11:07:30 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/06 14:50:16 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/07 13:34:28 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,10 @@
 //   kill(getpid(), SIGINT);
 // }
 
+class A
+{
+};
+
 int main()
 {
   // std::cout << RED << "*------------------------ Testing the vector ------------------------*" << RESET << std::endl;
@@ -143,21 +147,20 @@ int main()
   // signal(SIGALRM, alarm_handler);
   // // iterator_tests();
 
-  // constructors used in the same order as described above:
-  // ft::vector<int> first;                               // empty vector of ints
-  ft::vector<int> second(4, 100);                      // four ints with value 100
-  ft::vector<int> third(second.begin(), second.end()); // iterating through second
-  // ft::vector<int> fourth(third);                       // a copy of third
+  ft::vector<int> first;                              
+  ft::vector<int> second(4, 100);                     
+  ft::vector<int> third(second.begin(), second.end()); 
+  ft::vector<int> fourth(third);      
+  std::cout << fourth.size() << std::endl;                 
+
+  int myints[] = {16, 2, 77, 29};
+  ft::vector<int> fifth(myints, myints + sizeof(myints) / sizeof(int));
 
 
-  // // the iterator constructor can also be used to construct from arrays:
-  // int myints[] = {16, 2, 77, 29};
-  // ft::vector<int> fifth(myints, myints + sizeof(myints) / sizeof(int));
-
-  // std::cout << "The contents of fifth are:";
-  // for (ft::vector<int>::iterator it = fifth.begin(); it != fifth.end(); ++it)
-  //   std::cout << ' ' << *it;
-  // std::cout << '\n';
+  std::cout << "The contents of fifth are:";
+  for (ft::vector<int>::iterator it = fifth.begin(); it != fifth.end(); ++it)
+    std::cout << ' ' << *it;
+  std::cout << '\n';
 
   return 0;
 }
