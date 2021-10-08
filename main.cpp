@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 11:07:30 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/08 11:45:34 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/08 12:12:01 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,15 +146,15 @@ int main()
   // // sleep(1);
   // signal(SIGALRM, alarm_handler);
   // // iterator_tests()Î;
-  ft::vector<int> myvector(5, 100);
+  const ft::vector<int> myvector(10, 59);
 
   ft::vector<int>::const_iterator last = myvector.end();
   ft::vector<int>::const_iterator first = myvector.begin();
   std::cout << last - first << std::endl;
-  // std::cout << "myvector contains:";
-  // for (ft::vector<int>::const_iterator it = myvector.begin(); it != myvector.end(); ++it)
-  //   std::cout << ' ' << *it;
-  // std::cout << '\n';
+  std::cout << "myvector contains:";
+  for (ft::vector<int>::const_iterator it = myvector.begin(); it != myvector.end(); ++it)
+    std::cout << ' ' << *it;
+  std::cout << '\n';
 
   return 0;
 }

@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/05 10:32:21 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/08 11:30:25 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/08 12:11:21 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,15 +40,20 @@ namespace ft
             this->_it = &arr[pos];
         }
 
+        m_iterator(pointer it)
+        {
+            this->_it = it;
+        }
+
         m_iterator(const m_iterator &copy)
         {
             *this = copy;
         }
 
-        // operator m_iterator<const T>() const
-        // {
-        //     return m_iterator<const T>(this->_it);
-        // }
+        operator m_iterator<const T>() const
+        {
+            return m_iterator<const T>(this->_it);
+        }
 
         m_iterator &operator=(const m_iterator &copy)
         {
@@ -123,25 +128,7 @@ namespace ft
 
         difference_type operator-(m_iterator &copy)
         {
-            difference_type result = 0;
-            m_iterator first(copy);
-            m_iterator last(*this);
-
-            std::cout << "gegeg\n";
-            while (first != last)
-            {
-                if (first < last)
-                {
-                    ++first;
-                    ++result;
-                }
-                else if (first > last)
-                {
-                    --first;
-                    --result;
-                }
-            }
-            return result;
+            return this->_it - copy._it;
         }
 
         bool operator<(const m_iterator &copy)
