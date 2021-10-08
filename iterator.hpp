@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/05 10:32:21 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/06 12:09:55 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/08 11:30:25 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,27 +31,28 @@ namespace ft
 
     private:
         pointer _it;
-        size_t _pos;
 
     public:
-        m_iterator() : _it(nullptr), _pos(0) {}
+        m_iterator() : _it(nullptr){}
 
         m_iterator(T *arr, size_t pos)
         {
             this->_it = &arr[pos];
-            this->_pos = pos;
         }
 
         m_iterator(const m_iterator &copy)
         {
-            this->_it = copy._it;
-            this->_pos = copy._pos;
+            *this = copy;
         }
+
+        // operator m_iterator<const T>() const
+        // {
+        //     return m_iterator<const T>(this->_it);
+        // }
 
         m_iterator &operator=(const m_iterator &copy)
         {
             this->_it = copy._it;
-            this->_pos = copy._pos;
             return *this;
         }
 
@@ -126,6 +127,7 @@ namespace ft
             m_iterator first(copy);
             m_iterator last(*this);
 
+            std::cout << "gegeg\n";
             while (first != last)
             {
                 if (first < last)

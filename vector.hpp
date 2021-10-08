@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/05 11:01:38 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/07 13:34:28 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/08 11:46:54 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ namespace ft
     {
     public:
         /*----------------[ MEMBER TYPES ]----------------*/
-
+        
         typedef T value_type;
         typedef T &reference;
         typedef const T &const_reference;
@@ -32,7 +32,7 @@ namespace ft
         typedef ft::m_iterator<T> iterator;
         typedef ft::m_iterator<const T> const_iterator;
 
-        /*----------------[ MEMBER TYPES ]----------------*/
+        /*----------------[ END OF MEMBER TYPES ]----------------*/
 
         /*----------------[ EXCEPTIONS ]----------------*/
 
@@ -54,7 +54,7 @@ namespace ft
             }
         };
 
-        /*----------------[ EXCEPTIONS ]----------------*/
+        /*----------------[ END OF EXCEPTIONS ]----------------*/
 
         /*----------------[ CONSTRUCTORS ]----------------*/
 
@@ -96,7 +96,43 @@ namespace ft
             this->_allocator = x._allocator;
         }
 
-        /*----------------[ CONSTRUCTORS ]----------------*/
+        vector &operator=(const vector &x)
+        {
+            if (x.capacity() > this->_capacity)
+            {
+                for (int i = 0; i < this->_size; i++)
+                    this->_arr[i].~value_type();
+                this->_allocator.deallocate(this->_arr, this->_capacity);
+
+                this->_arr = this->_allocator.allocate(x.capacity());
+                for (int i = 0; i < x.size(); i++)
+                    this->_arr[i] = x[i];
+                this->_capacity = x.capacity();
+                this->_size = x.size();
+            }
+            else
+            {
+                for (int i = 0; i < this->_size; i++)
+                    this->_arr[i].~value_type();
+                for (int i = 0; i < x.size(); i++)
+                    this->_arr[i] = x[i];
+                this->_size = x.size();
+            }
+            return *this;
+        }
+
+        ~vector()
+        {
+            if (this->_capacity > 0)
+            {
+                for (int i = 0; i < this->_size; i++)
+                    this->_arr[i].~value_type();
+                this->_allocator.deallocate(this->_arr, this->_capacity);
+                this->_size = 0;
+                this->_capacity = 0;
+            }
+        }
+        /*----------------[ END OF CONSTRUCTORS ]----------------*/
 
         /*----------------[ ITERATOR FUNCTIONS ]----------------*/
 
@@ -107,6 +143,12 @@ namespace ft
             return it;
         }
 
+        const_iterator begin() const
+        {
+            const_iterator it(this->_arr, 0);
+            return it;
+        }
+
         // Returns an iterator referring to the past-the-end element in the vector container.
         iterator end()
         {
@@ -114,7 +156,13 @@ namespace ft
             return it;
         }
 
-        /*----------------[ ITERATOR FUNCTIONS ]----------------*/
+        const_iterator end() const
+        {
+            const_iterator it(this->_arr, this->_size);
+            return it;
+        }
+
+        /*----------------[ END OF ITERATOR FUNCTIONS ]----------------*/
 
         /*----------------[ CAPACITY FUNCTIONS ]----------------*/
 
@@ -189,7 +237,7 @@ namespace ft
             }
         }
 
-        /*----------------[ CAPACITY FUNCTIONS ]----------------*/
+        /*----------------[ END OF CAPACITY FUNCTIONS ]----------------*/
 
         /*----------------[ ELEMENT ACCESS ]----------------*/
 
@@ -235,7 +283,7 @@ namespace ft
         reference back() { return this->_arr[this->_size - 1]; }
         const_reference back() const { return this->_arr[this->_size - 1]; }
 
-        /*----------------[ ELEMENT ACCESS ]----------------*/
+        /*----------------[ END OF ELEMENT ACCESS ]----------------*/
 
         /*----------------[ MODIFIERS ]----------------*/
 
@@ -280,7 +328,6 @@ namespace ft
         // Adds a new element at the end of the vector, after its current last element. The content of val is copied (or moved) to the new element.
         void push_back(const value_type &val)
         {
-
             if (this->_size + 1 > this->_capacity)
             {
                 reserve(this->_capacity + 1);
@@ -361,14 +408,14 @@ namespace ft
             this->_size = 0;
         }
 
-        /*----------------[ MODIFIERS ]----------------*/
+        /*----------------[ END OF  MODIFIERS ]----------------*/
 
         /*----------------[ ALLOCATOR ]----------------*/
 
         // Returns a copy of the allocator object associated with the vector.
         allocator_type get_allocator() const { return this->_allocator; }
 
-        /*----------------[ ALLOCATOR ]----------------*/
+        /*----------------[ END OF ALLOCATOR ]----------------*/
 
     private:
         value_type *_arr;
@@ -474,6 +521,6 @@ namespace ft
         return (lhs > rhs || lhs == rhs) ? true : false;
     }
 
-    /*----------------[ NON-MEMBER FUNCTION OVERLOADS ]----------------*/
+    /*----------------[ END OF NON-MEMBER FUNCTION OVERLOADS ]----------------*/
 
 }
