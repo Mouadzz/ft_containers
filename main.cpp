@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 11:07:30 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/07 13:34:28 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/08 11:45:34 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,22 +145,16 @@ int main()
   // std::cout << RED << "*------------------------ Testing the vector ------------------------*" << RESET << std::endl;
   // // sleep(1);
   // signal(SIGALRM, alarm_handler);
-  // // iterator_tests();
+  // // iterator_tests()Î;
+  ft::vector<int> myvector(5, 100);
 
-  ft::vector<int> first;                              
-  ft::vector<int> second(4, 100);                     
-  ft::vector<int> third(second.begin(), second.end()); 
-  ft::vector<int> fourth(third);      
-  std::cout << fourth.size() << std::endl;                 
-
-  int myints[] = {16, 2, 77, 29};
-  ft::vector<int> fifth(myints, myints + sizeof(myints) / sizeof(int));
-
-
-  std::cout << "The contents of fifth are:";
-  for (ft::vector<int>::iterator it = fifth.begin(); it != fifth.end(); ++it)
-    std::cout << ' ' << *it;
-  std::cout << '\n';
+  ft::vector<int>::const_iterator last = myvector.end();
+  ft::vector<int>::const_iterator first = myvector.begin();
+  std::cout << last - first << std::endl;
+  // std::cout << "myvector contains:";
+  // for (ft::vector<int>::const_iterator it = myvector.begin(); it != myvector.end(); ++it)
+  //   std::cout << ' ' << *it;
+  // std::cout << '\n';
 
   return 0;
 }
