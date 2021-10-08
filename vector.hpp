@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/05 11:01:38 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/08 12:11:25 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/08 13:31:08 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ namespace ft
     {
     public:
         /*----------------[ MEMBER TYPES ]----------------*/
-        
+
         typedef T value_type;
         typedef T &reference;
         typedef const T &const_reference;
@@ -102,7 +102,9 @@ namespace ft
             {
                 for (int i = 0; i < this->_size; i++)
                     this->_arr[i].~value_type();
-                this->_allocator.deallocate(this->_arr, this->_capacity);
+
+                if (this->_capacity > 0)
+                    this->_allocator.deallocate(this->_arr, this->_capacity);
 
                 this->_arr = this->_allocator.allocate(x.capacity());
                 for (int i = 0; i < x.size(); i++)
@@ -175,7 +177,6 @@ namespace ft
         // Resizes the container so that it contains n elements.
         void resize(size_type n, value_type val = value_type())
         {
-
             if (n < this->_size)
             {
                 for (int i = n; i < this->_size; i++)
@@ -190,7 +191,8 @@ namespace ft
                     for (int i = 0; i < this->_size; i++)
                         tmp[i] = this->_arr[i];
 
-                    this->_allocator.deallocate(this->_arr, this->_capacity);
+                    if (this->_capacity > 0)
+                        this->_allocator.deallocate(this->_arr, this->_capacity);
 
                     for (int i = this->_size; i < n; i++)
                         tmp[i] = val;
@@ -230,7 +232,7 @@ namespace ft
                 value_type *tmp = this->_allocator.allocate(n);
                 for (int i = 0; i < this->_size; i++)
                     tmp[i] = this->_arr[i];
-                if (this->_size > 0)
+                if (this->_capacity > 0)
                     this->_allocator.deallocate(this->_arr, this->_capacity);
                 this->_arr = tmp;
                 this->_capacity = n;
@@ -288,17 +290,51 @@ namespace ft
         /*----------------[ MODIFIERS ]----------------*/
 
         // Assigns new contents to the vector, replacing its current contents, and modifying its size accordingly.
-        // template <class InputIterator>
-        // void assign(InputIterator first, InputIterator last)
-        // {
-
-        // }
+        template <class InputIterator>
+        void assign(InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator())
+        {
+            int range = last - first;
+            if (range < 0)
+                throw length_error();
+            else
+            {
+                if (range > this->_capacity)
+                {
+                    for (int i = 0; i < this->_size; i++)
+                        this->_arr[i].~value_type();
+                    if (this->_capacity > 0)
+                        this->_allocator.deallocate(this->_arr, this->_capacity);
+                    this->_arr = this->_allocator.allocate(range);
+                    for (InputIterator i = first; i != last; i++)
+                        this->push_back(*i);
+                    this->_capacity = range;
+                }
+                else
+                {
+                    if (range > this->_size)
+                    {
+                        for (int i = 0; i < this->_size; i++)
+                            this->_arr[i].~value_type();
+                        for (InputIterator i = first; i != last; i++)
+                            this->push_back(*i);
+                    }
+                    else
+                    {
+                        for (int i = 0; i < range; i++)
+                            this->_arr[i].~value_type();
+                        for (InputIterator i = first; i != last; i++)
+                            this->push_back(*i);
+                    }
+                }
+            }
+        }
 
         void assign(size_type n, const value_type &val)
         {
             if (n > this->_capacity)
             {
-                this->_allocator.deallocate(this->_arr, this->_capacity);
+                if (this->_capacity > 0)
+                    this->_allocator.deallocate(this->_arr, this->_capacity);
                 this->_arr = this->_allocator.allocate(n);
                 for (int i = 0; i < n; i++)
                     this->_arr[i] = val;
@@ -382,7 +418,9 @@ namespace ft
                 tmp[i] = this->_arr[i];
             size_type tmpCap = this->_capacity;
             size_type tmpSize = this->_size;
-            this->_allocator.deallocate(this->_arr, this->_capacity);
+
+            if (this->_capacity > 0)
+                this->_allocator.deallocate(this->_arr, this->_capacity);
 
             this->_arr = this->_allocator.allocate(x._capacity);
             for (int i = 0; i < x._size; i++)
@@ -390,14 +428,15 @@ namespace ft
             this->_size = x._size;
             this->_capacity = x._capacity;
 
-            x._allocator.deallocate(x._arr, x._capacity);
+            if (x._capacity > 0)
+                x._allocator.deallocate(x._arr, x._capacity);
             x._arr = x._allocator.allocate(tmpCap);
             for (int i = 0; i < tmpSize; i++)
                 x._arr[i] = tmp[i];
             x._size = tmpSize;
             x._capacity = tmpCap;
-
-            this->_allocator.deallocate(tmp, tmpCap);
+            if (tmpCap > 0)
+                this->_allocator.deallocate(tmp, tmpCap);
         }
 
         // Removes all elements from the vector (which are destroyed), leaving the container with a size of 0.
