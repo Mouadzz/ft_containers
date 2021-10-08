@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/05 10:32:21 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/08 12:11:21 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/08 13:23:22 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,8 +122,7 @@ namespace ft
 
         m_iterator &operator-(const T &n)
         {
-            m_iterator tmp(*this);
-            return tmp -= n;
+            return *this -= n;
         }
 
         difference_type operator-(m_iterator &copy)

@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 11:07:30 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/08 12:12:01 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/08 13:25:07 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,15 +146,22 @@ int main()
   // // sleep(1);
   // signal(SIGALRM, alarm_handler);
   // // iterator_tests()Î;
-  const ft::vector<int> myvector(10, 59);
+  ft::vector<int> first;
+  ft::vector<int> second;
+  ft::vector<int> third;
 
-  ft::vector<int>::const_iterator last = myvector.end();
-  ft::vector<int>::const_iterator first = myvector.begin();
-  std::cout << last - first << std::endl;
-  std::cout << "myvector contains:";
-  for (ft::vector<int>::const_iterator it = myvector.begin(); it != myvector.end(); ++it)
-    std::cout << ' ' << *it;
-  std::cout << '\n';
+  first.assign(7, 100); // 7 ints with a value of 100
+  ft::vector<int>::iterator it;
+  it = first.begin() + 1;
 
+  second.assign(it, first.end() - 1); // the 5 central values of first
+
+
+  int myints[] = {1776, 7, 4}; 
+  third.assign(myints, myints + 3); // assigning from array.
+
+  std::cout << "Size of first: " << int(first.size()) << '\n';
+  std::cout << "Size of second: " << int(second.size()) << '\n';
+  std::cout << "Size of third: " << int(third.size()) << '\n';
   return 0;
 }
