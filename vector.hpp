@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/05 11:01:38 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/09 17:04:09 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/09 20:49:31 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -384,27 +384,88 @@ namespace ft
         // The vector is extended by inserting new elements before the element at the specified position, effectively increasing the container size by the number of elements inserted.
         iterator insert(iterator position, const value_type &val)
         {
-            iterator ret = this->m_insert(position, val);
+            iterator ret = this->m_insert(position, val, 1);
             return ret;
         }
 
         void insert(iterator position, size_type n, const value_type &val)
         {
-            iterator ret = position;
-            for (int i = 0; i < n; i++)
-                ret = this->m_insert(ret, val);
+            this->m_insert(position, val, n);
         }
 
         template <class InputIterator>
         void insert(iterator position, InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator())
         {
-            iterator ret = position;
             int range = last - first;
-            iterator tmp(last - 1);
-            for (int i = 0; i < range; i++)
+            if (this->_size + range > this->_capacity)
             {
-                ret = this->m_insert(ret, *tmp);
-                tmp--;
+                size_t newCap = this->_capacity + range;
+                if (newCap > this->max_size())
+                    throw length_error();
+                value_type *m_tmp = this->_allocator.allocate(newCap);
+                iterator m_first = this->begin();
+                iterator m_last = this->end();
+                size_t pos = position - m_first;
+                size_t end = (m_last + range) - m_first;
+                int i = 0;
+                while (i < pos)
+                {
+                    m_tmp[i] = *m_first;
+                    i++;
+                    m_first++;
+                }
+                iterator tmp(first);
+                for (int j = 0; j < range; j++)
+                {
+                    m_tmp[i] = *tmp;
+                    i++;
+                    tmp++;
+                }
+                while (i < end)
+                {
+                    m_tmp[i] = *m_first;
+                    i++;
+                    m_first++;
+                }
+                if (this->_capacity > 0)
+                    this->_allocator.deallocate(this->_arr, this->_capacity);
+                this->_arr = m_tmp;
+                this->_capacity = newCap;
+                this->_size += range;
+            }
+            else
+            {
+                iterator begin = this->begin();
+                iterator end(this->_arr, this->_capacity - (range + 1));
+                iterator m_tmp(this->_arr, this->_capacity - 1);
+                while (m_tmp != begin)
+                {
+                    if (m_tmp == (position + (range - 1)))
+                    {
+                        iterator tmp(last - 1);
+                        for (int i = 0; i < range; i++)
+                        {
+                            *m_tmp = *tmp;
+                            m_tmp--;
+                            tmp--;
+                        }
+                        break;
+                    }
+                    *m_tmp = *end;
+                    end--;
+                    m_tmp--;
+                }
+                if ((m_tmp == (position + (range - 1))) && (position == begin))
+                {
+                    iterator tmp(last - 1);
+                    for (int i = 0; i < range; i++)
+                    {
+                        *m_tmp = *tmp;
+                        m_tmp--;
+                        tmp--;
+                    }
+                }
+                this->_size += range;
             }
         }
 
@@ -472,19 +533,19 @@ namespace ft
         size_type _capacity;
         allocator_type _allocator;
 
-        iterator m_insert(iterator position, const value_type &val)
+        iterator m_insert(iterator position, const value_type &val, size_type n)
         {
             iterator ret = position;
-            if (this->_size + 1 > this->_capacity)
+            if (this->_size + n > this->_capacity)
             {
-                size_t newCap = this->_capacity + 1;
+                size_t newCap = this->_capacity + n;
                 if (newCap > this->max_size())
                     throw length_error();
                 value_type *tmp = this->_allocator.allocate(newCap);
                 iterator first = this->begin();
                 iterator last = this->end();
                 size_t pos = position - first;
-                size_t end = (last + 1) - first;
+                size_t end = (last + n) - first;
                 int i = 0;
                 while (i < pos)
                 {
@@ -492,10 +553,13 @@ namespace ft
                     i++;
                     first++;
                 }
-                tmp[i] = val;
                 iterator pointer(tmp, i);
                 ret = pointer;
-                i++;
+                for (int j = 0; j < n; j++)
+                {
+                    tmp[i] = val;
+                    i++;
+                }
                 while (i < end)
                 {
                     tmp[i] = *first;
@@ -506,27 +570,37 @@ namespace ft
                     this->_allocator.deallocate(this->_arr, this->_capacity);
                 this->_arr = tmp;
                 this->_capacity = newCap;
-                this->_size += 1;
+                this->_size += n;
             }
             else
             {
                 iterator begin = this->begin();
-                iterator end(this->_arr, this->_capacity - 2);
+                iterator end(this->_arr, this->_capacity - (n + 1));
                 iterator tmp(this->_arr, this->_capacity - 1);
                 while (tmp != begin)
                 {
-                    if (tmp == position)
+                    if (tmp == (position + (n - 1)))
                     {
-                        *tmp = val;
+                        for (int i = 0; i < n; i++)
+                        {
+                            *tmp = val;
+                            tmp--;
+                        }
                         break;
                     }
                     *tmp = *end;
                     end--;
                     tmp--;
                 }
-                if ((tmp == position) && (position == begin))
-                    *tmp = val;
-                this->_size += 1;
+                if ((tmp == (position + (n - 1))) && (position == begin))
+                {
+                    for (int i = 0; i < n; i++)
+                    {
+                        *tmp = val;
+                        tmp--;
+                    }
+                }
+                this->_size += n;
             }
             return ret;
         }
