@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 11:07:30 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/09 11:53:33 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/09 13:49:55 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,17 +148,19 @@ int main()
   // // iterator_tests();
 
   // ---------------------------------------------------- //
-  ft::vector<int> myvector(3, 100);
+  ft::vector<int> myvector(6, 2);
   ft::vector<int>::iterator it;
 
-  myvector.reserve(6);
+  myvector.reserve(10);
 
-  it = myvector.end();
-  it = myvector.insert(it, 200);
+  it = myvector.end() - 3;
+  it = myvector.insert(it, 1);
 
   for (it = myvector.begin(); it < myvector.end(); it++)
     std::cout << ' ' << *it;
   std::cout << '\n';
+
+  
 
   // myvector.insert(it, 2, 300);
 

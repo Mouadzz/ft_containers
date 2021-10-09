@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/05 11:01:38 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/09 11:53:25 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/09 13:50:27 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -415,21 +415,23 @@ namespace ft
             }
             else
             {
-                std::cout << "here\n";
                 iterator begin = this->begin();
-                iterator end(this->_arr, this->capacity() - 1);
-                iterator afterEnd(this->_arr, this->capacity());
-                while (end > begin)
+                iterator end(this->_arr, this->_capacity - 2);
+                iterator tmp(this->_arr, this->_capacity - 1);
+                while (tmp != begin)
                 {
-                    if (end == position)
+                    if (tmp == position)
                     {
-                        *afterEnd = val;
-                        afterEnd--;
+                        *tmp = val;
+                        break;
                     }
-                    *afterEnd = *end;
+                    *tmp = *end;
                     end--;
-                    afterEnd--;
+                    tmp--;
                 }
+                if ((tmp == position) && (position == begin))
+                    *tmp = val;
+                this->_size += 1;
             }
             return position;
         }
