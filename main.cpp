@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 11:07:30 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/09 17:02:57 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/09 20:50:19 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,8 +148,8 @@ int main()
   // // iterator_tests();
 
   // ---------------------------------------------------- //
-  std::vector<int> myvector(3, 100);
-  std::vector<int>::iterator it;
+  ft::vector<int> myvector(3, 100);
+  ft::vector<int>::iterator it;
 
   it = myvector.begin();
   it = myvector.insert(it, 200);
@@ -159,7 +159,7 @@ int main()
   // "it" no longer valid, get a new one:
   it = myvector.begin();
 
-  std::vector<int> anothervector(2, 400);
+  ft::vector<int> anothervector(2, 400);
   myvector.insert(it + 2, anothervector.begin(), anothervector.end());
 
   int myarray[] = {501, 502, 503};
@@ -169,4 +169,6 @@ int main()
   for (it = myvector.begin(); it < myvector.end(); it++)
     std::cout << ' ' << *it;
   std::cout << '\n';
+
+  return 0;
 }
