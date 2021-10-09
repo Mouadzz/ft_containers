@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/05 11:01:38 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/09 13:50:27 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/09 17:04:09 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -384,68 +384,29 @@ namespace ft
         // The vector is extended by inserting new elements before the element at the specified position, effectively increasing the container size by the number of elements inserted.
         iterator insert(iterator position, const value_type &val)
         {
-            if (this->_size + 1 > this->_capacity)
-            {
-                size_t newCap = this->_capacity + 1;
-                if (newCap > this->max_size())
-                    throw length_error();
-                value_type *tmp = this->_allocator.allocate(newCap);
-                iterator i = this->begin();
-                iterator end = this->end();
-                int j = 0;
-                while (i < position)
-                {
-                    tmp[j] = *i;
-                    i++;
-                    j++;
-                }
-                tmp[j] = val;
-                j++;
-                while (i != end)
-                {
-                    tmp[j] = *i;
-                    i++;
-                    j++;
-                }
-                if (this->_capacity > 0)
-                    this->_allocator.deallocate(this->_arr, this->_capacity);
-                this->_arr = tmp;
-                this->_capacity = newCap;
-                this->_size += 1;
-            }
-            else
-            {
-                iterator begin = this->begin();
-                iterator end(this->_arr, this->_capacity - 2);
-                iterator tmp(this->_arr, this->_capacity - 1);
-                while (tmp != begin)
-                {
-                    if (tmp == position)
-                    {
-                        *tmp = val;
-                        break;
-                    }
-                    *tmp = *end;
-                    end--;
-                    tmp--;
-                }
-                if ((tmp == position) && (position == begin))
-                    *tmp = val;
-                this->_size += 1;
-            }
-            return position;
+            iterator ret = this->m_insert(position, val);
+            return ret;
         }
 
-        // void insert (iterator position, size_type n, const value_type& val)
-        // {
+        void insert(iterator position, size_type n, const value_type &val)
+        {
+            iterator ret = position;
+            for (int i = 0; i < n; i++)
+                ret = this->m_insert(ret, val);
+        }
 
-        // }
-
-        // template <class InputIterator>
-        // void insert (iterator position, InputIterator first, InputIterator last)
-        // {
-
-        // }
+        template <class InputIterator>
+        void insert(iterator position, InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator())
+        {
+            iterator ret = position;
+            int range = last - first;
+            iterator tmp(last - 1);
+            for (int i = 0; i < range; i++)
+            {
+                ret = this->m_insert(ret, *tmp);
+                tmp--;
+            }
+        }
 
         // Removes from the vector either a single element (position) or a range of elements ([first,last)).
         // iterator erase (iterator position)
@@ -510,6 +471,65 @@ namespace ft
         size_type _size;
         size_type _capacity;
         allocator_type _allocator;
+
+        iterator m_insert(iterator position, const value_type &val)
+        {
+            iterator ret = position;
+            if (this->_size + 1 > this->_capacity)
+            {
+                size_t newCap = this->_capacity + 1;
+                if (newCap > this->max_size())
+                    throw length_error();
+                value_type *tmp = this->_allocator.allocate(newCap);
+                iterator first = this->begin();
+                iterator last = this->end();
+                size_t pos = position - first;
+                size_t end = (last + 1) - first;
+                int i = 0;
+                while (i < pos)
+                {
+                    tmp[i] = *first;
+                    i++;
+                    first++;
+                }
+                tmp[i] = val;
+                iterator pointer(tmp, i);
+                ret = pointer;
+                i++;
+                while (i < end)
+                {
+                    tmp[i] = *first;
+                    i++;
+                    first++;
+                }
+                if (this->_capacity > 0)
+                    this->_allocator.deallocate(this->_arr, this->_capacity);
+                this->_arr = tmp;
+                this->_capacity = newCap;
+                this->_size += 1;
+            }
+            else
+            {
+                iterator begin = this->begin();
+                iterator end(this->_arr, this->_capacity - 2);
+                iterator tmp(this->_arr, this->_capacity - 1);
+                while (tmp != begin)
+                {
+                    if (tmp == position)
+                    {
+                        *tmp = val;
+                        break;
+                    }
+                    *tmp = *end;
+                    end--;
+                    tmp--;
+                }
+                if ((tmp == position) && (position == begin))
+                    *tmp = val;
+                this->_size += 1;
+            }
+            return ret;
+        }
     };
 
     /*----------------[ NON-MEMBER FUNCTION OVERLOADS ]----------------*/
