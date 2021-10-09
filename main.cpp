@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 11:07:30 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/08 13:25:07 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/09 11:53:33 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,23 +145,34 @@ int main()
   // std::cout << RED << "*------------------------ Testing the vector ------------------------*" << RESET << std::endl;
   // // sleep(1);
   // signal(SIGALRM, alarm_handler);
-  // // iterator_tests()Î;
-  ft::vector<int> first;
-  ft::vector<int> second;
-  ft::vector<int> third;
+  // // iterator_tests();
 
-  first.assign(7, 100); // 7 ints with a value of 100
+  // ---------------------------------------------------- //
+  ft::vector<int> myvector(3, 100);
   ft::vector<int>::iterator it;
-  it = first.begin() + 1;
 
-  second.assign(it, first.end() - 1); // the 5 central values of first
+  myvector.reserve(6);
 
+  it = myvector.end();
+  it = myvector.insert(it, 200);
 
-  int myints[] = {1776, 7, 4}; 
-  third.assign(myints, myints + 3); // assigning from array.
+  for (it = myvector.begin(); it < myvector.end(); it++)
+    std::cout << ' ' << *it;
+  std::cout << '\n';
 
-  std::cout << "Size of first: " << int(first.size()) << '\n';
-  std::cout << "Size of second: " << int(second.size()) << '\n';
-  std::cout << "Size of third: " << int(third.size()) << '\n';
-  return 0;
+  // myvector.insert(it, 2, 300);
+
+  // // "it" no longer valid, get a new one:
+  // it = myvector.begin();
+
+  // std::vector<int> anothervector(2, 400);
+  // myvector.insert(it + 2, anothervector.begin(), anothervector.end());
+
+  // int myarray[] = {501, 502, 503};
+  // myvector.insert(myvector.begin(), myarray, myarray + 3);
+
+  // std::cout << "myvector contains:";
+  // for (it = myvector.begin(); it < myvector.end(); it++)
+  //   std::cout << ' ' << *it;
+  // std::cout << '\n';
 }
