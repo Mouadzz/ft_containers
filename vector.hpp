@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/05 11:01:38 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/08 13:31:08 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/09 11:53:25 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -382,10 +382,57 @@ namespace ft
         }
 
         // The vector is extended by inserting new elements before the element at the specified position, effectively increasing the container size by the number of elements inserted.
-        // iterator insert (iterator position, const value_type& val)
-        // {
-
-        // }
+        iterator insert(iterator position, const value_type &val)
+        {
+            if (this->_size + 1 > this->_capacity)
+            {
+                size_t newCap = this->_capacity + 1;
+                if (newCap > this->max_size())
+                    throw length_error();
+                value_type *tmp = this->_allocator.allocate(newCap);
+                iterator i = this->begin();
+                iterator end = this->end();
+                int j = 0;
+                while (i < position)
+                {
+                    tmp[j] = *i;
+                    i++;
+                    j++;
+                }
+                tmp[j] = val;
+                j++;
+                while (i != end)
+                {
+                    tmp[j] = *i;
+                    i++;
+                    j++;
+                }
+                if (this->_capacity > 0)
+                    this->_allocator.deallocate(this->_arr, this->_capacity);
+                this->_arr = tmp;
+                this->_capacity = newCap;
+                this->_size += 1;
+            }
+            else
+            {
+                std::cout << "here\n";
+                iterator begin = this->begin();
+                iterator end(this->_arr, this->capacity() - 1);
+                iterator afterEnd(this->_arr, this->capacity());
+                while (end > begin)
+                {
+                    if (end == position)
+                    {
+                        *afterEnd = val;
+                        afterEnd--;
+                    }
+                    *afterEnd = *end;
+                    end--;
+                    afterEnd--;
+                }
+            }
+            return position;
+        }
 
         // void insert (iterator position, size_type n, const value_type& val)
         // {
@@ -561,5 +608,4 @@ namespace ft
     }
 
     /*----------------[ END OF NON-MEMBER FUNCTION OVERLOADS ]----------------*/
-
 }
