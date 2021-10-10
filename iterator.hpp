@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/05 10:32:21 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/09 15:10:21 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/10 13:16:23 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ namespace ft
         pointer _it;
 
     public:
-        m_iterator() : _it(nullptr){}
+        m_iterator() : _it(nullptr) {}
 
         m_iterator(T *arr, size_t pos)
         {
@@ -63,12 +63,12 @@ namespace ft
 
         bool operator==(const m_iterator &copy)
         {
-            return (this->_it == copy._it) ? true : false;
+            return (this->_it == copy._it);
         }
 
         bool operator!=(const m_iterator &copy)
         {
-            return (this->_it != copy._it) ? true : false;
+            return (this->_it != copy._it);
         }
 
         T &operator*()
@@ -76,7 +76,7 @@ namespace ft
             return *this->_it;
         }
 
-        T operator->()
+        pointer operator->()
         {
             return this->_it;
         }
@@ -113,16 +113,18 @@ namespace ft
             return *this;
         }
 
-        m_iterator &operator+(const T &n)
+        m_iterator operator+(const T &n)
         {
             m_iterator tmp(*this);
-
-            return tmp += n;
+            tmp._it += n;
+            return tmp;
         }
 
-        m_iterator &operator-(const T &n)
+        m_iterator operator-(const T &n)
         {
-            return *this -= n;
+            m_iterator tmp(*this);
+            tmp._it -= n;
+            return tmp;
         }
 
         difference_type operator-(m_iterator &copy)
@@ -132,33 +134,33 @@ namespace ft
 
         bool operator<(const m_iterator &copy)
         {
-            return (this->_it < copy._it) ? true : false;
+            return (this->_it < copy._it);
         }
 
         bool operator>(const m_iterator &copy)
         {
-            return (this->_it > copy._it) ? true : false;
+            return (this->_it > copy._it);
         }
 
         bool operator<=(const m_iterator &copy)
         {
-            return (this->_it <= copy._it) ? true : false;
+            return (this->_it <= copy._it);
         }
 
         bool operator>=(const m_iterator &copy)
         {
-            return (this->_it >= copy._it) ? true : false;
+            return (this->_it >= copy._it);
         }
 
         m_iterator &operator+=(const T &n)
         {
-            this->_it += n;
+            *this = *this + n;
             return *this;
         }
 
         m_iterator &operator-=(const T &n)
         {
-            this->_it -= n;
+            *this = *this - n;
             return *this;
         }
 
