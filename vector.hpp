@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/05 11:01:38 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/09 20:49:31 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/10 12:01:03 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -470,15 +470,85 @@ namespace ft
         }
 
         // Removes from the vector either a single element (position) or a range of elements ([first,last)).
-        // iterator erase (iterator position)
-        // {
+        iterator erase(iterator position)
+        {
+            iterator end = this->end() - 1;
+            iterator ret;
+            if (position == end)
+            {
+                this->pop_back();
+                ret = this->end();
+            }
+            else
+            {
+                size_t newCap = this->_capacity - 1;
+                value_type *tmp = this->_allocator.allocate(newCap);
+                iterator first = this->begin();
+                iterator last = this->end();
+                size_t pos = position - first;
+                size_t end = newCap;
+                int i = 0;
+                while (i < pos)
+                {
+                    tmp[i] = *first;
+                    i++;
+                    first++;
+                }
+                first++;
+                iterator pointer(tmp, i);
+                ret = pointer;
+                while (i < end)
+                {
+                    tmp[i] = *first;
+                    i++;
+                    first++;
+                }
+                if (this->_capacity > 0)
+                    this->_allocator.deallocate(this->_arr, this->_capacity);
+                this->_arr = tmp;
+                this->_capacity = newCap;
+                this->_size -= 1;
+            }
+            return ret;
+        }
 
-        // }
-
-        // iterator erase (iterator first, iterator last)
-        // {
-
-        // }
+        iterator erase(iterator first, iterator last)
+        {
+            iterator ret;
+            if (last > first)
+            {
+                int range = last - first;
+                size_t newCap = this->_capacity - range;
+                value_type *tmp = this->_allocator.allocate(newCap);
+                iterator m_first = this->begin();
+                iterator m_last = this->end();
+                int i = 0;
+                while (m_first != first)
+                {
+                    tmp[i] = *m_first;
+                    i++;
+                    m_first++;
+                }
+                iterator pointer(tmp, i);
+                ret = pointer;
+                for (int i = 0; i < range; i++)
+                    m_first++;
+                while (i < newCap)
+                {
+                    tmp[i] = *m_first;
+                    i++;
+                    m_first++;
+                }
+                if (this->_capacity > 0)
+                    this->_allocator.deallocate(this->_arr, this->_capacity);
+                this->_arr = tmp;
+                this->_capacity = newCap;
+                this->_size -= range;
+            }
+            else
+                ret = this->begin();
+            return ret;
+        }
 
         // Exchanges the content of the container by the content of x, which is another vector object of the same type. Sizes may differ.
         void swap(vector &x)
