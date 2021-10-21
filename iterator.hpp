@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/05 10:32:21 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/10 14:49:30 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/21 12:02:02 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,12 +179,4 @@ namespace ft
         tmp += n;
         return tmp;
     }
-
-    /*----------------[ REVERSE ITERATOR ]----------------*/
-
-    template <class Iterator> class reverse_iterator
-    {
-        
-    }
-
 }
