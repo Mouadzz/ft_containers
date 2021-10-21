@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/05 11:01:38 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/21 16:48:12 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/21 19:20:42 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ namespace ft
         typedef ft::m_iterator<T> iterator;
         typedef ft::m_iterator<const T> const_iterator;
         typedef ft::reverse_iterator<iterator> reverse_iterator;
-        typedef ft::reverse_iterator<const const_iterator> const_reverse_iterator;
+        typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
 
         /*----------------[ END OF MEMBER TYPES ]----------------*/
 
