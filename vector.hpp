@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/05 11:01:38 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/21 12:02:01 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/21 16:48:12 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <iostream>
 #include "iterator.hpp"
 #include "utils.hpp"
+#include "reverse_iterator.hpp"
 
 namespace ft
 {
@@ -31,6 +32,8 @@ namespace ft
         typedef size_t size_type;
         typedef ft::m_iterator<T> iterator;
         typedef ft::m_iterator<const T> const_iterator;
+        typedef ft::reverse_iterator<iterator> reverse_iterator;
+        typedef ft::reverse_iterator<const const_iterator> const_reverse_iterator;
 
         /*----------------[ END OF MEMBER TYPES ]----------------*/
 
@@ -59,8 +62,8 @@ namespace ft
         /*----------------[ CONSTRUCTORS ]----------------*/
 
         // Constructs an empty container, with no elements.
-        explicit vector(const allocator_type &alloc = allocator_type()) : _size(0), _capacity(0), _allocator(alloc){
-
+        explicit vector(const allocator_type &alloc = allocator_type()) : _size(0), _capacity(0), _allocator(alloc)
+        {
         }
 
         // Constructs a container with n elements. Each element is a copy of val.
@@ -168,6 +171,28 @@ namespace ft
             return it;
         }
 
+        //Returns a reverse iterator pointing to the last element in the vector (i.e., its reverse beginning).
+        reverse_iterator rbegin()
+        {
+            return reverse_iterator(this->end());
+        }
+
+        const_reverse_iterator rbegin() const
+        {
+            return const_reverse_iterator(this->end());
+        }
+
+        // Returns a reverse iterator pointing to the theoretical element preceding the first element in the vector (which is considered its reverse end).
+        reverse_iterator rend()
+        {
+            return reverse_iterator(this->begin());
+        }
+
+        const_reverse_iterator rend() const
+        {
+            return const_reverse_iterator(this->begin());
+        }
+
         /*----------------[ END OF ITERATOR FUNCTIONS ]----------------*/
 
         /*----------------[ CAPACITY FUNCTIONS ]----------------*/
@@ -234,7 +259,7 @@ namespace ft
             if (n > this->_capacity)
             {
                 value_type *tmp = this->_allocator.allocate(n);
-                for (int i = 0; i < this->_size; i++)
+                for (size_t i = 0; i < this->_size; i++)
                     tmp[i] = this->_arr[i];
                 if (this->_capacity > 0)
                     this->_allocator.deallocate(this->_arr, this->_capacity);

@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 11:59:10 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/21 12:02:00 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/21 14:36:52 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ namespace ft
     template <class T>
     class iterator_traits<const T *>
     {
+    public:
         typedef std::ptrdiff_t difference_type;
         typedef T value_type;
         typedef const T *pointer;
