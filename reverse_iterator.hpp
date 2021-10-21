@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 12:01:43 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/21 17:52:34 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/21 19:20:44 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,17 @@ namespace ft
             this->_rit = --tmp;
         }
 
-        template <class Iter>
-        reverse_iterator(const reverse_iterator<Iter> &rev_it)
+        reverse_iterator(const reverse_iterator &rev_it)
         {
             this->_rit = rev_it._rit;
         }
 
+        template <typename riter>
+        reverse_iterator(reverse_iterator<riter> const& rit)
+        {
+            _rit = --rit.base();
+        }
+        
         iterator_type base() const
         {
             iterator_type tmp = this->_rit;
