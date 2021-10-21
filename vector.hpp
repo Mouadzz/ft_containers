@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/05 11:01:38 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/10 12:55:26 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/21 12:02:01 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,22 +59,26 @@ namespace ft
         /*----------------[ CONSTRUCTORS ]----------------*/
 
         // Constructs an empty container, with no elements.
-        explicit vector(const allocator_type &alloc = allocator_type()) : _size(0), _capacity(0) {}
+        explicit vector(const allocator_type &alloc = allocator_type()) : _size(0), _capacity(0), _allocator(alloc){
+
+        }
 
         // Constructs a container with n elements. Each element is a copy of val.
         explicit vector(size_type n, const value_type &val = value_type(),
                         const allocator_type &alloc = allocator_type())
         {
+            this->_allocator = alloc;
             this->_capacity = n;
             this->_size = n;
             this->_arr = this->_allocator.allocate(n);
-            for (int i = 0; i < n; i++)
+            for (size_t i = 0; i < n; i++)
                 _arr[i] = val;
         }
 
         template <class InputIterator>
         vector(InputIterator first, InputIterator last, const allocator_type &alloc = allocator_type(), typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator())
         {
+            this->_allocator = alloc;
             int range = last - first;
             if (range < 0)
                 throw length_error();
@@ -127,7 +131,7 @@ namespace ft
         {
             if (this->_capacity > 0)
             {
-                for (int i = 0; i < this->_size; i++)
+                for (size_t i = 0; i < this->_size; i++)
                     this->_arr[i].~value_type();
                 this->_allocator.deallocate(this->_arr, this->_capacity);
                 this->_size = 0;
@@ -194,7 +198,7 @@ namespace ft
                     if (this->_capacity > 0)
                         this->_allocator.deallocate(this->_arr, this->_capacity);
 
-                    for (int i = this->_size; i < n; i++)
+                    for (size_t i = this->_size; i < n; i++)
                         tmp[i] = val;
 
                     this->_capacity = n;
@@ -203,7 +207,7 @@ namespace ft
                 }
                 else
                 {
-                    for (int i = this->_size; i < n; i++)
+                    for (size_t i = this->_size; i < n; i++)
                         this->_arr[i] = val;
                     this->_size = n;
                 }
@@ -336,7 +340,7 @@ namespace ft
                 if (this->_capacity > 0)
                     this->_allocator.deallocate(this->_arr, this->_capacity);
                 this->_arr = this->_allocator.allocate(n);
-                for (int i = 0; i < n; i++)
+                for (size_t i = 0; i < n; i++)
                     this->_arr[i] = val;
                 this->_capacity = n;
                 this->_size = n;
@@ -347,15 +351,15 @@ namespace ft
                 {
                     for (int i = 0; i < this->_size; i++)
                         this->_arr[i].~value_type();
-                    for (int i = 0; i < n; i++)
+                    for (size_t i = 0; i < n; i++)
                         this->_arr[i] = val;
                     this->_size = n;
                 }
                 else
                 {
-                    for (int i = 0; i < n; i++)
+                    for (size_t i = 0; i < n; i++)
                         this->_arr[i].~value_type();
-                    for (int i = 0; i < n; i++)
+                    for (size_t i = 0; i < n; i++)
                         this->_arr[i] = val;
                 }
             }
@@ -407,7 +411,7 @@ namespace ft
                 iterator m_last = this->end();
                 size_t pos = position - m_first;
                 size_t end = (m_last + range) - m_first;
-                int i = 0;
+                size_t i = 0;
                 while (i < pos)
                 {
                     m_tmp[i] = *m_first;
@@ -487,7 +491,7 @@ namespace ft
                 iterator last = this->end();
                 size_t pos = position - first;
                 size_t end = newCap;
-                int i = 0;
+                size_t i = 0;
                 while (i < pos)
                 {
                     tmp[i] = *first;
@@ -522,7 +526,7 @@ namespace ft
                 value_type *tmp = this->_allocator.allocate(newCap);
                 iterator m_first = this->begin();
                 iterator m_last = this->end();
-                int i = 0;
+                size_t i = 0;
                 while (m_first != first)
                 {
                     tmp[i] = *m_first;
@@ -572,7 +576,7 @@ namespace ft
             if (x._capacity > 0)
                 x._allocator.deallocate(x._arr, x._capacity);
             x._arr = x._allocator.allocate(tmpCap);
-            for (int i = 0; i < tmpSize; i++)
+            for (size_t i = 0; i < tmpSize; i++)
                 x._arr[i] = tmp[i];
             x._size = tmpSize;
             x._capacity = tmpCap;
@@ -616,7 +620,7 @@ namespace ft
                 iterator last = this->end();
                 size_t pos = position - first;
                 size_t end = (last + n) - first;
-                int i = 0;
+                size_t i = 0;
                 while (i < pos)
                 {
                     tmp[i] = *first;
@@ -625,7 +629,7 @@ namespace ft
                 }
                 iterator pointer(tmp, i);
                 ret = pointer;
-                for (int j = 0; j < n; j++)
+                for (size_t j = 0; j < n; j++)
                 {
                     tmp[i] = val;
                     i++;
@@ -651,7 +655,7 @@ namespace ft
                 {
                     if (tmp == (position + (n - 1)))
                     {
-                        for (int i = 0; i < n; i++)
+                        for (size_t i = 0; i < n; i++)
                         {
                             *tmp = val;
                             tmp--;
@@ -664,7 +668,7 @@ namespace ft
                 }
                 if ((tmp == (position + (n - 1))) && (position == begin))
                 {
-                    for (int i = 0; i < n; i++)
+                    for (size_t i = 0; i < n; i++)
                     {
                         *tmp = val;
                         tmp--;
