@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/05 10:32:21 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/21 12:02:02 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/21 17:52:32 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ namespace ft
     template <class T>
     class m_iterator : public ft::iterator<std::random_access_iterator_tag, T>
     {
+    public:
         typedef typename ft::iterator<std::random_access_iterator_tag, T>::pointer pointer;
         typedef typename ft::iterator<std::random_access_iterator_tag, T>::difference_type difference_type;
 
@@ -45,7 +46,7 @@ namespace ft
             this->_it = it;
         }
 
-        m_iterator(const m_iterator &copy)
+        m_iterator(m_iterator const &copy)
         {
             *this = copy;
         }
@@ -55,23 +56,13 @@ namespace ft
             return m_iterator<const T>(this->_it);
         }
 
-        m_iterator &operator=(const m_iterator &copy)
+        m_iterator &operator=(m_iterator const &copy)
         {
             this->_it = copy._it;
             return *this;
         }
 
-        bool operator==(const m_iterator &copy)
-        {
-            return (this->_it == copy._it);
-        }
-
-        bool operator!=(const m_iterator &copy)
-        {
-            return (this->_it != copy._it);
-        }
-
-        T &operator*()
+        T &operator*() const
         {
             return *this->_it;
         }
@@ -120,36 +111,46 @@ namespace ft
             return tmp;
         }
 
-        m_iterator operator-(const T &n)
+        m_iterator operator-(const T &n) const
         {
             m_iterator tmp(*this);
             tmp._it -= n;
             return tmp;
         }
 
-        difference_type operator-(m_iterator &copy)
+        difference_type operator-(const m_iterator &copy) const
         {
             return this->_it - copy._it;
         }
 
-        bool operator<(const m_iterator &copy)
+        friend bool operator==(const m_iterator &lhs, const m_iterator &rhs)
         {
-            return (this->_it < copy._it);
+            return (lhs._it == rhs._it);
         }
 
-        bool operator>(const m_iterator &copy)
+        friend bool operator!=(const m_iterator &lhs, const m_iterator &rhs)
         {
-            return (this->_it > copy._it);
+            return (lhs._it != rhs._it);
         }
 
-        bool operator<=(const m_iterator &copy)
+        friend bool operator<(const m_iterator &lhs, const m_iterator &rhs)
         {
-            return (this->_it <= copy._it);
+            return (lhs._it < rhs._it);
         }
 
-        bool operator>=(const m_iterator &copy)
+        friend bool operator>(const m_iterator &lhs, const m_iterator &rhs)
         {
-            return (this->_it >= copy._it);
+            return (lhs._it > rhs._it);
+        }
+
+        friend bool operator<=(const m_iterator &lhs, const m_iterator &rhs)
+        {
+            return (lhs._it <= rhs._it);
+        }
+
+        friend bool operator>=(const m_iterator &lhs, const m_iterator &rhs)
+        {
+            return (lhs._it >= rhs._it);
         }
 
         m_iterator &operator+=(const T &n)
@@ -164,11 +165,10 @@ namespace ft
             return *this;
         }
 
-        T &operator[](const T &n)
+        T &operator[](const T &n) const
         {
             return this->_it[n];
         }
-
         ~m_iterator() {}
     };
 
