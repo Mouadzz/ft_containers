@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/05 11:01:38 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/21 19:20:42 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/22 12:42:11 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "iterator.hpp"
 #include "utils.hpp"
 #include "reverse_iterator.hpp"
+#include <limits>
 
 namespace ft
 {
@@ -95,35 +96,32 @@ namespace ft
             }
         }
 
-        vector(const vector &x)
+        vector(const vector &x) : _size(0), _capacity(0)
         {
-            this->_arr = x._arr;
-            this->_size = x._size;
-            this->_capacity = x._capacity;
-            this->_allocator = x._allocator;
+            *this = x;
         }
 
         vector &operator=(const vector &x)
         {
             if (x.capacity() > this->_capacity)
             {
-                for (int i = 0; i < this->_size; i++)
+                for (size_t i = 0; i < this->_size; i++)
                     this->_arr[i].~value_type();
 
                 if (this->_capacity > 0)
                     this->_allocator.deallocate(this->_arr, this->_capacity);
 
                 this->_arr = this->_allocator.allocate(x.capacity());
-                for (int i = 0; i < x.size(); i++)
+                for (size_t i = 0; i < x.size(); i++)
                     this->_arr[i] = x[i];
                 this->_capacity = x.capacity();
                 this->_size = x.size();
             }
             else
             {
-                for (int i = 0; i < this->_size; i++)
+                for (size_t i = 0; i < this->_size; i++)
                     this->_arr[i].~value_type();
-                for (int i = 0; i < x.size(); i++)
+                for (size_t i = 0; i < x.size(); i++)
                     this->_arr[i] = x[i];
                 this->_size = x.size();
             }
@@ -201,14 +199,19 @@ namespace ft
         size_type size() const { return this->_size; }
 
         // Returns the maximum number of elements that the vector can hold.
-        size_type max_size() const { return (pow(2, 64) / sizeof(value_type) - 1); }
+        size_type max_size() const
+        {
+            size_t maxvalue = std::numeric_limits<size_t>::max();
+            size_type res = maxvalue / sizeof(value_type);
+            return res;
+        }
 
         // Resizes the container so that it contains n elements.
         void resize(size_type n, value_type val = value_type())
         {
             if (n < this->_size)
             {
-                for (int i = n; i < this->_size; i++)
+                for (size_t i = n; i < this->_size; i++)
                     this->_arr[i].~value_type();
                 this->_size = n;
             }
@@ -217,7 +220,7 @@ namespace ft
                 if (n > this->_capacity)
                 {
                     value_type *tmp = this->_allocator.allocate(n);
-                    for (int i = 0; i < this->_size; i++)
+                    for (size_t i = 0; i < this->_size; i++)
                         tmp[i] = this->_arr[i];
 
                     if (this->_capacity > 0)
@@ -261,6 +264,8 @@ namespace ft
                 value_type *tmp = this->_allocator.allocate(n);
                 for (size_t i = 0; i < this->_size; i++)
                     tmp[i] = this->_arr[i];
+                for (size_t i = 0; i < this->_size; i++)
+                    this->_arr[i].~value_type();
                 if (this->_capacity > 0)
                     this->_allocator.deallocate(this->_arr, this->_capacity);
                 this->_arr = tmp;
