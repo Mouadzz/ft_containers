@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/05 10:32:21 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/22 11:00:14 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/22 15:04:19 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,14 +98,14 @@ namespace ft
             return *this;
         }
 
-        m_iterator operator+(const T &n)
+        m_iterator operator+(const size_t n)
         {
             m_iterator tmp(*this);
             tmp._it += n;
             return tmp;
         }
 
-        m_iterator operator-(const T &n) const
+        m_iterator operator-(const size_t n) const
         {
             m_iterator tmp(*this);
             tmp._it -= n;
@@ -147,19 +147,19 @@ namespace ft
             return (lhs._it >= rhs._it);
         }
 
-        m_iterator &operator+=(const T &n)
+        m_iterator &operator+=(const size_t n)
         {
             *this = *this + n;
             return *this;
         }
 
-        m_iterator &operator-=(const T &n)
+        m_iterator &operator-=(const size_t n)
         {
             *this = *this - n;
             return *this;
         }
 
-        T &operator[](const T &n) const
+        T &operator[](const size_t n) const
         {
             return this->_it[n];
         }

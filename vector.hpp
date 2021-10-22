@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/05 11:01:38 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/22 12:42:11 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/22 15:34:16 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,28 +38,6 @@ namespace ft
 
         /*----------------[ END OF MEMBER TYPES ]----------------*/
 
-        /*----------------[ EXCEPTIONS ]----------------*/
-
-        class out_of_range : public std::exception
-        {
-        public:
-            virtual const char *what() const throw()
-            {
-                return "Index out of range !";
-            }
-        };
-
-        class length_error : public std::exception
-        {
-        public:
-            virtual const char *what() const throw()
-            {
-                return "Size requested is negative or  greater than the maximum size !";
-            }
-        };
-
-        /*----------------[ END OF EXCEPTIONS ]----------------*/
-
         /*----------------[ CONSTRUCTORS ]----------------*/
 
         // Constructs an empty container, with no elements.
@@ -85,7 +63,7 @@ namespace ft
             this->_allocator = alloc;
             int range = last - first;
             if (range < 0)
-                throw length_error();
+                throw std::length_error("Size requested is negative or  greater than the maximum size !");
             else
             {
                 this->_capacity = range;
@@ -223,6 +201,8 @@ namespace ft
                     for (size_t i = 0; i < this->_size; i++)
                         tmp[i] = this->_arr[i];
 
+                    for (size_t i = 0; i < this->_size; i++)
+                        this->_arr[i].~value_type();
                     if (this->_capacity > 0)
                         this->_allocator.deallocate(this->_arr, this->_capacity);
 
@@ -258,14 +238,12 @@ namespace ft
         void reserve(size_type n)
         {
             if (n > this->max_size())
-                throw length_error();
+                throw std::length_error("Size requested is negative or  greater than the maximum size !");
             if (n > this->_capacity)
             {
                 value_type *tmp = this->_allocator.allocate(n);
                 for (size_t i = 0; i < this->_size; i++)
                     tmp[i] = this->_arr[i];
-                for (size_t i = 0; i < this->_size; i++)
-                    this->_arr[i].~value_type();
                 if (this->_capacity > 0)
                     this->_allocator.deallocate(this->_arr, this->_capacity);
                 this->_arr = tmp;
@@ -283,7 +261,7 @@ namespace ft
             if (n < this->_size)
                 return this->_arr[n];
             else
-                throw out_of_range();
+                throw std::out_of_range("Index out of range !");
         }
 
         const_reference operator[](size_type n) const
@@ -291,7 +269,7 @@ namespace ft
             if (n < this->_size)
                 return this->_arr[n];
             else
-                throw out_of_range();
+                throw std::out_of_range("Index out of range !");
         }
 
         // Returns a reference to the element at position n in the vector.
@@ -300,7 +278,7 @@ namespace ft
             if (n < this->_size)
                 return this->_arr[n];
             else
-                throw out_of_range();
+                throw std::out_of_range("Index out of range !");
         }
 
         const_reference at(size_type n) const
@@ -308,7 +286,7 @@ namespace ft
             if (n < this->_size)
                 return this->_arr[n];
             else
-                throw out_of_range();
+                throw std::out_of_range("Index out of range !");
         }
 
         // Returns a reference to the first element in the vector.
@@ -322,51 +300,14 @@ namespace ft
         /*----------------[ END OF ELEMENT ACCESS ]----------------*/
 
         /*----------------[ MODIFIERS ]----------------*/
-
         // Assigns new contents to the vector, replacing its current contents, and modifying its size accordingly.
-        template <class InputIterator>
-        void assign(InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator())
-        {
-            int range = last - first;
-            if (range < 0)
-                throw length_error();
-            else
-            {
-                if (range > this->_capacity)
-                {
-                    for (int i = 0; i < this->_size; i++)
-                        this->_arr[i].~value_type();
-                    if (this->_capacity > 0)
-                        this->_allocator.deallocate(this->_arr, this->_capacity);
-                    this->_arr = this->_allocator.allocate(range);
-                    for (InputIterator i = first; i != last; i++)
-                        this->push_back(*i);
-                    this->_capacity = range;
-                }
-                else
-                {
-                    if (range > this->_size)
-                    {
-                        for (int i = 0; i < this->_size; i++)
-                            this->_arr[i].~value_type();
-                        for (InputIterator i = first; i != last; i++)
-                            this->push_back(*i);
-                    }
-                    else
-                    {
-                        for (int i = 0; i < range; i++)
-                            this->_arr[i].~value_type();
-                        for (InputIterator i = first; i != last; i++)
-                            this->push_back(*i);
-                    }
-                }
-            }
-        }
 
         void assign(size_type n, const value_type &val)
         {
             if (n > this->_capacity)
             {
+                for (size_t i = 0; i < this->_size; i++)
+                    this->_arr[i].~value_type();
                 if (this->_capacity > 0)
                     this->_allocator.deallocate(this->_arr, this->_capacity);
                 this->_arr = this->_allocator.allocate(n);
@@ -379,7 +320,7 @@ namespace ft
             {
                 if (n > this->_size)
                 {
-                    for (int i = 0; i < this->_size; i++)
+                    for (size_t i = 0; i < this->_size; i++)
                         this->_arr[i].~value_type();
                     for (size_t i = 0; i < n; i++)
                         this->_arr[i] = val;
@@ -391,6 +332,44 @@ namespace ft
                         this->_arr[i].~value_type();
                     for (size_t i = 0; i < n; i++)
                         this->_arr[i] = val;
+                    this->_size = n;
+                }
+            }
+        }
+
+        template <class InputIterator>
+        void assign(InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator())
+        {
+            size_t range = last - first;
+            if (range > 0)
+            {
+                if (range > this->_capacity)
+                {
+                    for (size_t i = 0; i < this->_size; i++)
+                        this->_arr[i].~value_type();
+                    if (this->_capacity > 0)
+                        this->_allocator.deallocate(this->_arr, this->_capacity);
+                    this->_arr = this->_allocator.allocate(range);
+                    for (InputIterator i = first; i != last; i++)
+                        this->push_back(*i);
+                    this->_capacity = range;
+                }
+                else
+                {
+                    if (range > this->_size)
+                    {
+                        for (size_t i = 0; i < this->_size; i++)
+                            this->_arr[i].~value_type();
+                        for (InputIterator i = first; i != last; i++)
+                            this->push_back(*i);
+                    }
+                    else
+                    {
+                        for (size_t i = 0; i < range; i++)
+                            this->_arr[i].~value_type();
+                        for (InputIterator i = first; i != last; i++)
+                            this->push_back(*i);
+                    }
                 }
             }
         }
@@ -435,7 +414,7 @@ namespace ft
             {
                 size_t newCap = this->_capacity + range;
                 if (newCap > this->max_size())
-                    throw length_error();
+                    throw std::length_error("Size requested is negative or  greater than the maximum size !");
                 value_type *m_tmp = this->_allocator.allocate(newCap);
                 iterator m_first = this->begin();
                 iterator m_last = this->end();
@@ -644,7 +623,7 @@ namespace ft
             {
                 size_t newCap = this->_capacity + n;
                 if (newCap > this->max_size())
-                    throw length_error();
+                    throw std::length_error("Size requested is negative or  greater than the maximum size !");
                 value_type *tmp = this->_allocator.allocate(newCap);
                 iterator first = this->begin();
                 iterator last = this->end();
