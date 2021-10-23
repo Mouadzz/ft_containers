@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/05 11:01:38 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/23 11:19:55 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/23 20:40:35 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -531,10 +531,11 @@ namespace ft
                     i++;
                     first++;
                 }
+                for (size_t j = 0; j < this->_size; j++)
+                    this->_arr[j].~value_type();
                 if (this->_capacity > 0)
                     this->_allocator.deallocate(this->_arr, this->_capacity);
                 this->_arr = tmp;
-                this->_capacity = newCap;
                 this->_size -= 1;
             }
             return ret;
@@ -567,6 +568,8 @@ namespace ft
                     i++;
                     m_first++;
                 }
+                for (size_t j = 0; j < this->_size; j++)
+                    this->_arr[j].~value_type();
                 if (this->_capacity > 0)
                     this->_allocator.deallocate(this->_arr, this->_capacity);
                 this->_arr = tmp;
@@ -583,7 +586,7 @@ namespace ft
         {
 
             value_type *tmp = this->_allocator.allocate(this->_capacity);
-            for (int i = 0; i < this->_size; i++)
+            for (size_t i = 0; i < this->_size; i++)
                 tmp[i] = this->_arr[i];
             size_type tmpCap = this->_capacity;
             size_type tmpSize = this->_size;
@@ -592,7 +595,7 @@ namespace ft
                 this->_allocator.deallocate(this->_arr, this->_capacity);
 
             this->_arr = this->_allocator.allocate(x._capacity);
-            for (int i = 0; i < x._size; i++)
+            for (size_t i = 0; i < x._size; i++)
                 this->_arr[i] = x[i];
             this->_size = x._size;
             this->_capacity = x._capacity;
@@ -611,7 +614,7 @@ namespace ft
         // Removes all elements from the vector (which are destroyed), leaving the container with a size of 0.
         void clear()
         {
-            for (int i = 0; i < this->_size; i++)
+            for (size_t i = 0; i < this->_size; i++)
                 this->_arr[i].~value_type();
             this->_size = 0;
         }
@@ -655,7 +658,7 @@ namespace ft
                 ret = pointer;
                 for (size_t j = 0; j < n; j++)
                 {
-                    tmp[i] = val;
+                    this->_allocator.construct(&tmp[i], val);
                     i++;
                 }
                 while (i < end)
@@ -674,17 +677,17 @@ namespace ft
             }
             else
             {
-                std::cout << "hello\n";
                 iterator begin = this->begin();
-                iterator end(this->_arr, this->_capacity - (n + 1));
-                iterator tmp(this->_arr, this->_capacity - 1);
+                iterator end(this->_arr, this->_size - 1);
+                iterator tmp(this->_arr, this->_size + (n  - 1));
                 while (tmp != begin)
                 {
                     if (tmp == (position + (n - 1)))
                     {
                         for (size_t i = 0; i < n; i++)
                         {
-                            *tmp = val;
+                            // *tmp = val;
+                            this->_allocator.construct(&*tmp, val);
                             tmp--;
                         }
                         break;
@@ -697,7 +700,7 @@ namespace ft
                 {
                     for (size_t i = 0; i < n; i++)
                     {
-                        *tmp = val;
+                        this->_allocator.construct(&*tmp, val);
                         tmp--;
                     }
                 }
@@ -723,7 +726,7 @@ namespace ft
 
         if (lhs.size() == rhs.size())
         {
-            for (int i = 0; i < lhs.size(); i++)
+            for (size_t i = 0; i < lhs.size(); i++)
             {
                 if (lhs[i] != rhs[i])
                     return false;
@@ -740,7 +743,7 @@ namespace ft
 
         if (lhs.size() == rhs.size())
         {
-            for (int i = 0; i < lhs.size(); i++)
+            for (size_t i = 0; i < lhs.size(); i++)
             {
                 if (lhs[i] != rhs[i])
                     return true;
@@ -759,7 +762,7 @@ namespace ft
             return false;
         else
         {
-            for (int i = 0; i < ((lhs.size() < rhs.size()) ? lhs.size() : rhs.size()); i++)
+            for (size_t i = 0; i < ((lhs.size() < rhs.size()) ? lhs.size() : rhs.size()); i++)
             {
                 if (lhs[i] > rhs[i])
                     return false;
@@ -785,7 +788,7 @@ namespace ft
             return false;
         else
         {
-            for (int i = 0; i < ((lhs.size() < rhs.size()) ? lhs.size() : rhs.size()); i++)
+            for (size_t i = 0; i < ((lhs.size() < rhs.size()) ? lhs.size() : rhs.size()); i++)
             {
                 if (lhs[i] < rhs[i])
                     return false;
