@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/05 11:01:38 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/22 15:34:16 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/23 11:19:55 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -350,9 +350,14 @@ namespace ft
                     if (this->_capacity > 0)
                         this->_allocator.deallocate(this->_arr, this->_capacity);
                     this->_arr = this->_allocator.allocate(range);
+                    int j = 0;
                     for (InputIterator i = first; i != last; i++)
-                        this->push_back(*i);
+                    {
+                        this->_arr[j] = *i;
+                        j += 1;
+                    }
                     this->_capacity = range;
+                    this->_size = j;
                 }
                 else
                 {
@@ -360,15 +365,25 @@ namespace ft
                     {
                         for (size_t i = 0; i < this->_size; i++)
                             this->_arr[i].~value_type();
+                        int j = 0;
                         for (InputIterator i = first; i != last; i++)
-                            this->push_back(*i);
+                        {
+                            this->_arr[j] = *i;
+                            j += 1;
+                        }
+                        this->_size = j;
                     }
                     else
                     {
                         for (size_t i = 0; i < range; i++)
                             this->_arr[i].~value_type();
+                        int j = 0;
                         for (InputIterator i = first; i != last; i++)
-                            this->push_back(*i);
+                        {
+                            this->_arr[j] = *i;
+                            j += 1;
+                        }
+                        this->_size = j;
                     }
                 }
             }
@@ -379,7 +394,7 @@ namespace ft
         {
             if (this->_size + 1 > this->_capacity)
             {
-                reserve(this->_capacity + 1);
+                reserve((this->_capacity == 0) ? 1 : (this->_capacity * 2));
                 this->_arr[this->_size] = val;
             }
             else
@@ -649,6 +664,8 @@ namespace ft
                     i++;
                     first++;
                 }
+                for (size_t i = 0; i < this->_size; i++)
+                    this->_arr[i].~value_type();
                 if (this->_capacity > 0)
                     this->_allocator.deallocate(this->_arr, this->_capacity);
                 this->_arr = tmp;
@@ -657,6 +674,7 @@ namespace ft
             }
             else
             {
+                std::cout << "hello\n";
                 iterator begin = this->begin();
                 iterator end(this->_arr, this->_capacity - (n + 1));
                 iterator tmp(this->_arr, this->_capacity - 1);
