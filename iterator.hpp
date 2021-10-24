@@ -6,10 +6,12 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/05 10:32:21 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/24 10:56:35 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/24 13:44:16 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+
+#pragma once
 namespace ft
 {
     template <class Category, class T, class Distance = ptrdiff_t,

@@ -6,10 +6,11 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 11:59:10 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/21 14:36:52 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/24 13:44:20 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#pragma once
 namespace ft
 {
     template <class Iterator>
