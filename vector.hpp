@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/05 11:01:38 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/24 11:18:57 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/24 12:29:57 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -514,33 +514,20 @@ namespace ft
             }
             else
             {
-                size_t newCap = this->_capacity - 1;
-                value_type *tmp = this->_allocator.allocate(newCap);
                 iterator first = this->begin();
-                iterator last = this->end();
+                iterator last = this->end() - 1;
                 size_t pos = position - first;
-                size_t end = newCap;
                 size_t i = 0;
                 while (i < pos)
-                {
-                    tmp[i] = *first;
                     i++;
-                    first++;
-                }
-                first++;
-                iterator pointer(tmp, i);
+                this->_arr[i].~value_type();
+                iterator pointer(this->_arr, i);
                 ret = pointer;
-                while (i < end)
+                while (i + 1 < this->_size)
                 {
-                    tmp[i] = *first;
-                    i++;
-                    first++;
+                    this->_arr[i] = this->_arr[i + 1];
+                    i += 1;
                 }
-                for (size_t j = 0; j < this->_size; j++)
-                    this->_arr[j].~value_type();
-                if (this->_capacity > 0)
-                    this->_allocator.deallocate(this->_arr, this->_capacity);
-                this->_arr = tmp;
                 this->_size -= 1;
             }
             return ret;
@@ -589,31 +576,21 @@ namespace ft
         // Exchanges the content of the container by the content of x, which is another vector object of the same type. Sizes may differ.
         void swap(vector &x)
         {
+            Alloc tmp = this->_allocator;
+            this->_allocator = x._allocator;
+            x._allocator = tmp;
 
-            value_type *tmp = this->_allocator.allocate(this->_capacity);
-            for (size_t i = 0; i < this->_size; i++)
-                tmp[i] = this->_arr[i];
-            size_type tmpCap = this->_capacity;
-            size_type tmpSize = this->_size;
-
-            if (this->_capacity > 0)
-                this->_allocator.deallocate(this->_arr, this->_capacity);
-
-            this->_arr = this->_allocator.allocate(x._capacity);
-            for (size_t i = 0; i < x._size; i++)
-                this->_arr[i] = x[i];
-            this->_size = x._size;
+            size_t tmp1 = this->_capacity;
             this->_capacity = x._capacity;
+            x._capacity = tmp1;
 
-            if (x._capacity > 0)
-                x._allocator.deallocate(x._arr, x._capacity);
-            x._arr = x._allocator.allocate(tmpCap);
-            for (size_t i = 0; i < tmpSize; i++)
-                x._arr[i] = tmp[i];
-            x._size = tmpSize;
-            x._capacity = tmpCap;
-            if (tmpCap > 0)
-                this->_allocator.deallocate(tmp, tmpCap);
+            size_t tmp2 = this->_size;
+            this->_size = x._size;
+            x._size = tmp2;
+
+            T *tmp3 = this->_arr;
+            this->_arr = x._arr;
+            x._arr = tmp3;
         }
 
         // Removes all elements from the vector (which are destroyed), leaving the container with a size of 0.
