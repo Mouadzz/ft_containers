@@ -6,10 +6,11 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/05 11:01:38 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/24 12:29:57 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/24 13:43:59 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#pragma once
 #include <memory>
 #include <math.h>
 #include <iostream>
