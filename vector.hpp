@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/05 11:01:38 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/23 20:40:35 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/24 11:18:57 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -424,10 +424,16 @@ namespace ft
         template <class InputIterator>
         void insert(iterator position, InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator())
         {
-            int range = last - first;
+            size_t range = last - first;
             if (this->_size + range > this->_capacity)
             {
-                size_t newCap = this->_capacity + range;
+                size_t newCap;
+                if (this->_capacity == 0)
+                    newCap = range;
+                else if (this->_size >= range)
+                    newCap = this->_size * 2;
+                else
+                    newCap = this->_size + range;
                 if (newCap > this->max_size())
                     throw std::length_error("Size requested is negative or  greater than the maximum size !");
                 value_type *m_tmp = this->_allocator.allocate(newCap);
@@ -442,12 +448,11 @@ namespace ft
                     i++;
                     m_first++;
                 }
-                iterator tmp(first);
-                for (int j = 0; j < range; j++)
+                for (size_t j = 0; j < range; j++)
                 {
-                    m_tmp[i] = *tmp;
+                    m_tmp[i] = *first;
                     i++;
-                    tmp++;
+                    first++;
                 }
                 while (i < end)
                 {
@@ -470,12 +475,12 @@ namespace ft
                 {
                     if (m_tmp == (position + (range - 1)))
                     {
-                        iterator tmp(last - 1);
-                        for (int i = 0; i < range; i++)
+                        last--;
+                        for (size_t i = 0; i < range; i++)
                         {
-                            *m_tmp = *tmp;
+                            *m_tmp = *last;
                             m_tmp--;
-                            tmp--;
+                            last--;
                         }
                         break;
                     }
@@ -485,12 +490,12 @@ namespace ft
                 }
                 if ((m_tmp == (position + (range - 1))) && (position == begin))
                 {
-                    iterator tmp(last - 1);
-                    for (int i = 0; i < range; i++)
+                    last--;
+                    for (size_t i = 0; i < range; i++)
                     {
-                        *m_tmp = *tmp;
+                        *m_tmp = *last;
                         m_tmp--;
-                        tmp--;
+                        last--;
                     }
                 }
                 this->_size += range;
@@ -639,7 +644,13 @@ namespace ft
             iterator ret = position;
             if (this->_size + n > this->_capacity)
             {
-                size_t newCap = this->_capacity + n;
+                size_t newCap;
+                if (this->_capacity == 0)
+                    newCap = n;
+                else if (this->_size >= n)
+                    newCap = this->_size * 2;
+                else
+                    newCap = this->_size + n;
                 if (newCap > this->max_size())
                     throw std::length_error("Size requested is negative or  greater than the maximum size !");
                 value_type *tmp = this->_allocator.allocate(newCap);
@@ -679,14 +690,14 @@ namespace ft
             {
                 iterator begin = this->begin();
                 iterator end(this->_arr, this->_size - 1);
-                iterator tmp(this->_arr, this->_size + (n  - 1));
+                iterator tmp(this->_arr, this->_size + (n - 1));
                 while (tmp != begin)
                 {
                     if (tmp == (position + (n - 1)))
                     {
+                        ret = tmp;
                         for (size_t i = 0; i < n; i++)
                         {
-                            // *tmp = val;
                             this->_allocator.construct(&*tmp, val);
                             tmp--;
                         }
@@ -698,6 +709,7 @@ namespace ft
                 }
                 if ((tmp == (position + (n - 1))) && (position == begin))
                 {
+                    ret = tmp;
                     for (size_t i = 0; i < n; i++)
                     {
                         this->_allocator.construct(&*tmp, val);
