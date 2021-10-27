@@ -6,17 +6,23 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 15:59:33 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/27 16:47:53 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/27 19:11:26 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "map.hpp"
+
 namespace ft
 {
+    template <class Key, class T>
     class RBT
     {
+        typedef ft::pair<const Key, T> value_type;
+
     private:
         struct Node
         {
+            value_type *data;
             Node *parent;
             Node *left;
             Node *right;
@@ -36,9 +42,10 @@ namespace ft
             // ptr->right = nullptr;
             // root = ptr;
         }
-        void insert()
+        void insert(value_type val)
         {
-            std::cout << "New node inseterted! \n";
+            std::cout << "Key --> " << val.first << std::endl;
+            std::cout << "Value --> " << val.second << std::endl;
         }
 
         ~RBT() {}

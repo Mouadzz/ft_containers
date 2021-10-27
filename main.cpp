@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 11:07:30 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/27 15:59:07 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/27 19:06:06 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -3634,7 +3634,8 @@ int main(void)
 
   /* ------------------ Map ------------------*/
 
-  ft::map<char, int> first;
+  ft::map<int, int> mymap;
+
 
   return 0;
 }
