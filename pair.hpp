@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 15:03:08 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/27 15:49:03 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/27 19:17:55 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ namespace ft
         T2 second;
 
     public:
-        pair() {}
+        pair() : first(), second() {}
 
         template <class U, class V>
         pair(const pair<U, V> &pr)
@@ -71,7 +71,7 @@ namespace ft
     };
 
     template <class T1, class T2>
-    pair<T1, T2> make_pair(T1 x, T2 y)
+    ft::pair<T1, T2> make_pair(T1 x, T2 y)
     {
         return (ft::pair<T1, T2>(x, y));
     }
