@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 15:59:33 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/28 17:15:17 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/28 19:16:50 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,9 @@ namespace ft
         node_type *_root;
         allocator_type _allocator;
         allocator_other_type _node_allocator;
+        size_t len;
 
-        node_type *create_node(value_type val)
+        node_type *create_new_node(value_type val)
         {
             node_type *ptr;
             ptr = this->_node_allocator.allocate(1);
@@ -58,28 +59,49 @@ namespace ft
             return ptr;
         }
 
+        void add_new_node(node_type *parent, node_type *new_node)
+        {
+            std::cout << new_node->data->first << " " << parent->data->first << std::endl;
+            if (ft::my_compare(new_node->data->first, parent->data->first, key_compare()) == 0)
+            {
+                if (parent->right == nullptr)
+                {
+                    std::cout << "add new node to the right\n";
+                    parent->right = new_node;
+                    new_node->parent = parent;
+                }
+            }
+        }
+
     public:
-        RBT() : _root(nullptr) {}
+        RBT() {}
+        ~RBT() {}
 
         void insert(value_type val)
         {
             if (!this->_root)
             {
-                this->_root = this->create_node(val);
+                std::cout << "Tree is Empty -> make new node our root\n";
+                this->_root = this->create_new_node(val);
+                len++;
             }
+            // else
+            // {
+            //     std::cout << "Tree is not Empty -> add new node as leaf\n";
+            //     // node_type *new_node = this->create_new_node(val);
 
-            std::cout << this->_root->data->second << std::endl;
-
-            // int a = 4;
-            // int b = 3;
-            // if (ft::my_compare(a, b, key_compare()) == 1)
-            //     std::cout << "a < b \n";
-            // else if (!ft::my_compare(a, b, key_compare()) && !ft::my_compare(b, a, key_compare()))
-            //     std::cout << "a = b \n";
-            // else if (ft::my_compare(a, b, key_compare()) == 0)
-            //     std::cout << "a > b \n";
+            //     // std::cout << new_node->data->first << std::endl;
+            //     // add_new_node(this->_root, new_node);
+            //     len++;
+            // }
+            std::cout << "root key --> " << this->_root->data->first << "len -->" << len << std::endl;
         }
-
-        ~RBT() {}
     };
 }
+
+// if (ft::my_compare(a, b, key_compare()) == 1)
+//     std::cout << "a < b \n";
+// else if (!ft::my_compare(a, b, key_compare()) && !ft::my_compare(b, a, key_compare()))
+//     std::cout << "a = b \n";
+// else if (ft::my_compare(a, b, key_compare()) == 0)
+//     std::cout << "a > b \n";
