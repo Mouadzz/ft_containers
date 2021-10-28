@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 15:06:14 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/28 12:01:13 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/28 16:38:23 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 
 namespace ft
 {
+
     template <class Key,                                            // map::key_type
               class T,                                              // map::mapped_type
               class Compare = std::less<Key>,                       // map::key_compare
@@ -32,7 +33,7 @@ namespace ft
         typedef Alloc allocator_type;
 
     private:
-        ft::RBT<const Key, T, Alloc> tree;
+        ft::RBT<const Key, T, Alloc, Compare> tree;
         allocator_type _allocator;
 
     public:
