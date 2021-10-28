@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 15:06:14 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/27 19:20:33 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/28 12:01:13 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,17 +32,16 @@ namespace ft
         typedef Alloc allocator_type;
 
     private:
-        ft::RBT<Key, T> tree;
+        ft::RBT<const Key, T, Alloc> tree;
+        allocator_type _allocator;
 
     public:
         explicit map(const key_compare &comp = key_compare(),
-                     const allocator_type &alloc = allocator_type())
+                     const allocator_type &alloc = allocator_type()) : _allocator(alloc) {}
+
+        void insert(const value_type &val)
         {
-            std::cout << "Map Constructor\n";
-
-            value_type test(1, 2);
-
-            this->tree.insert(test);
+            tree.insert(val);
         }
     };
 }
