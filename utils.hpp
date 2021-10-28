@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/07 11:47:11 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/27 15:03:03 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/28 16:39:46 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,5 +84,11 @@ namespace ft
     {
         typedef T type;
     };
+
+    template <typename A, typename B, typename U>
+    bool my_compare(A a, B b, U u = U())
+    {
+        return u(a, b);
+    }
 
 }
