@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 15:59:33 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/28 19:16:50 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/29 12:00:28 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ namespace ft
         allocator_other_type _node_allocator;
         size_t len;
 
-        node_type *create_new_node(value_type val)
+        node_type *create_new_node(const value_type &val)
         {
             node_type *ptr;
             ptr = this->_node_allocator.allocate(1);
@@ -55,21 +55,50 @@ namespace ft
             ptr->left = nullptr;
             ptr->right = nullptr;
             ptr->data = this->_allocator.allocate(1);
-            ptr->data = &val;
+            this->_allocator.construct(ptr->data, val);
             return ptr;
         }
 
         void add_new_node(node_type *parent, node_type *new_node)
         {
-            std::cout << new_node->data->first << " " << parent->data->first << std::endl;
-            if (ft::my_compare(new_node->data->first, parent->data->first, key_compare()) == 0)
+            if (ft::my_compare(new_node->data->first, parent->data->first, key_compare()) == 0 &&
+                !(!ft::my_compare(new_node->data->first, parent->data->first, key_compare()) &&
+                  !ft::my_compare(parent->data->first, new_node->data->first, key_compare())))
             {
                 if (parent->right == nullptr)
                 {
-                    std::cout << "add new node to the right\n";
                     parent->right = new_node;
                     new_node->parent = parent;
                 }
+                else
+                    return add_new_node(parent->right, new_node);
+            }
+            else if (ft::my_compare(new_node->data->first, parent->data->first, key_compare()) == 1)
+            {
+                if (parent->left == nullptr)
+                {
+                    parent->left = new_node;
+                    new_node->parent = parent;
+                }
+                else
+                    return add_new_node(parent->left, new_node);
+            }
+        }
+
+        void print_helper(const std::string &prefix, const node_type *node, bool isLeft)
+        {
+            if (node != nullptr)
+            {
+                std::cout << prefix;
+
+                std::cout << (isLeft ? "├──" : "└──");
+
+                // print the value of the node
+                std::cout << node->data->first << " ";
+                std::cout << (isLeft ? "(L)" : "(R)") << std::endl;
+                // enter the next tree level - left and right branch
+                print_helper(prefix + (isLeft ? "│   " : "    "), node->left, true);
+                print_helper(prefix + (isLeft ? "│   " : "    "), node->right, false);
             }
         }
 
@@ -77,7 +106,7 @@ namespace ft
         RBT() {}
         ~RBT() {}
 
-        void insert(value_type val)
+        void insert(const value_type &val)
         {
             if (!this->_root)
             {
@@ -85,23 +114,20 @@ namespace ft
                 this->_root = this->create_new_node(val);
                 len++;
             }
-            // else
-            // {
-            //     std::cout << "Tree is not Empty -> add new node as leaf\n";
-            //     // node_type *new_node = this->create_new_node(val);
+            else
+            {
+                std::cout << "Tree is not Empty -> add new node as leaf\n";
+                node_type *new_node = this->create_new_node(val);
+                new_node->color = 1;
+                add_new_node(this->_root, new_node);
+                len++;
+            }
+        }
 
-            //     // std::cout << new_node->data->first << std::endl;
-            //     // add_new_node(this->_root, new_node);
-            //     len++;
-            // }
-            std::cout << "root key --> " << this->_root->data->first << "len -->" << len << std::endl;
+        void print_tree()
+        {
+            std::cout << '\n';
+            print_helper("", this->_root, false);
         }
     };
 }
-
-// if (ft::my_compare(a, b, key_compare()) == 1)
-//     std::cout << "a < b \n";
-// else if (!ft::my_compare(a, b, key_compare()) && !ft::my_compare(b, a, key_compare()))
-//     std::cout << "a = b \n";
-// else if (ft::my_compare(a, b, key_compare()) == 0)
-//     std::cout << "a > b \n";

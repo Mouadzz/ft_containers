@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 15:06:14 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/28 19:03:00 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/29 11:52:33 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,14 @@ namespace ft
         explicit map(const key_compare &comp = key_compare(),
                      const allocator_type &alloc = allocator_type()) : _allocator(alloc) {}
 
-        void insert(const value_type &val)
+        void insert(const value_type& val)
         {
             tree.insert(val);
+        }
+
+        void print_tree()
+        {
+           tree.print_tree(); 
         }
     };
 }
