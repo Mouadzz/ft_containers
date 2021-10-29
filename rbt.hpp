@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 15:59:33 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/29 17:01:52 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/29 19:06:35 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,13 @@ namespace ft
 
         void correct_tree(node_type *node)
         {
+            // if node parent is left child
             if (node->parent->isleft)
             {
+                // if our aunt is black or null then we rotate | rotation -> node->parent->parent black and its both childs red
                 if (node->parent->parent && (node->parent->parent->right == nullptr || node->parent->parent->right == 0))
-                    return rotate(node);
+                    rotate(node);
+                // if aunt is red then we color flip | flip color -> node->parent->parent red and its both childs black
                 else if (node->parent->parent)
                 {
                     if (node->parent->parent->right)
@@ -79,10 +82,13 @@ namespace ft
                     node->parent->color = 0;
                 }
             }
+            // if node parent is right child
             else
             {
+                // if our aunt is black or null then we rotate | rotation -> node->parent->parent black and its both childs red
                 if (node->parent->parent && (node->parent->parent->left == nullptr || node->parent->parent->left == 0))
                     return rotate(node);
+                // if aunt is red then we color flip | flip color -> node->parent->parent red and its both childs black
                 else if (node->parent->parent)
                 {
                     if (node->parent->parent->left)
@@ -95,38 +101,54 @@ namespace ft
 
         void check_color(node_type *node)
         {
+            // stop our recursive when we reach our route
             if (node != this->_root)
             {
+                // if we have two consecutive red nodes
                 if (node->color == 1 && node->parent->color == 1)
                     correct_tree(node);
+
+                // recursive till we reach our route
                 check_color(node->parent);
             }
         }
 
         void add_new_node(node_type *parent, node_type *new_node)
         {
+            // if the new node key is greater than the parent's node key
             if (ft::my_compare(new_node->data->first, parent->data->first, key_compare()) == 0 &&
                 !(!ft::my_compare(new_node->data->first, parent->data->first, key_compare()) &&
                   !ft::my_compare(parent->data->first, new_node->data->first, key_compare())))
             {
+                // if right child exist
                 if (parent->right == nullptr)
                 {
+                    // add our new node as a right child
                     parent->right = new_node;
                     new_node->parent = parent;
+
+                    // new node is right child
                     new_node->isleft = 0;
                 }
                 else
+                    // if parent's child exists then we add it to our parent's right child
                     return add_new_node(parent->right, new_node);
             }
+            // if the new node key is lesser than the parent's node key
             else if (ft::my_compare(new_node->data->first, parent->data->first, key_compare()) == 1)
             {
+                // if left child exist
                 if (parent->left == nullptr)
                 {
+                    // add our new node as a left child
                     parent->left = new_node;
                     new_node->parent = parent;
+
+                    // new node is left child
                     new_node->isleft = 1;
                 }
                 else
+                    // if parent's child exists then we add it to our parent's left child
                     return add_new_node(parent->left, new_node);
             }
         }
@@ -154,17 +176,22 @@ namespace ft
 
         void insert(const value_type &val)
         {
+            // check if tree is empty
             if (!this->_root)
             {
-                std::cout << "Tree is Empty -> make new node our root\n";
+                // create new node and make it our route
                 this->_root = this->create_new_node(val);
                 len++;
             }
             else
             {
-                std::cout << "Tree is not Empty -> add new node as leaf\n";
+                // create new node
                 node_type *new_node = this->create_new_node(val);
+
+                // all new nodes added are red
                 new_node->color = 1;
+
+                // add the new node as a leaf
                 add_new_node(this->_root, new_node);
                 len++;
             }
