@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 15:59:33 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/29 12:00:28 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/29 17:01:52 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ namespace ft
         Node *parent;
         Node *left;
         Node *right;
+        int isleft;
         int color;
     };
 
@@ -51,12 +52,55 @@ namespace ft
             node_type *ptr;
             ptr = this->_node_allocator.allocate(1);
             ptr->color = 0;
+            ptr->isleft = 1;
             ptr->parent = nullptr;
             ptr->left = nullptr;
             ptr->right = nullptr;
             ptr->data = this->_allocator.allocate(1);
             this->_allocator.construct(ptr->data, val);
             return ptr;
+        }
+
+        void rotate(node_type *node)
+        {
+        }
+
+        void correct_tree(node_type *node)
+        {
+            if (node->parent->isleft)
+            {
+                if (node->parent->parent && (node->parent->parent->right == nullptr || node->parent->parent->right == 0))
+                    return rotate(node);
+                else if (node->parent->parent)
+                {
+                    if (node->parent->parent->right)
+                        node->parent->parent->right->color = 0;
+                    node->parent->parent->color = 1;
+                    node->parent->color = 0;
+                }
+            }
+            else
+            {
+                if (node->parent->parent && (node->parent->parent->left == nullptr || node->parent->parent->left == 0))
+                    return rotate(node);
+                else if (node->parent->parent)
+                {
+                    if (node->parent->parent->left)
+                        node->parent->parent->left->color = 0;
+                    node->parent->parent->color = 1;
+                    node->parent->color = 0;
+                }
+            }
+        }
+
+        void check_color(node_type *node)
+        {
+            if (node != this->_root)
+            {
+                if (node->color == 1 && node->parent->color == 1)
+                    correct_tree(node);
+                check_color(node->parent);
+            }
         }
 
         void add_new_node(node_type *parent, node_type *new_node)
@@ -69,6 +113,7 @@ namespace ft
                 {
                     parent->right = new_node;
                     new_node->parent = parent;
+                    new_node->isleft = 0;
                 }
                 else
                     return add_new_node(parent->right, new_node);
@@ -79,6 +124,7 @@ namespace ft
                 {
                     parent->left = new_node;
                     new_node->parent = parent;
+                    new_node->isleft = 1;
                 }
                 else
                     return add_new_node(parent->left, new_node);
