@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 15:59:33 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/29 19:06:35 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/30 13:25:39 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,60 @@ namespace ft
             return ptr;
         }
 
+        void right_rotate(node_type *node)
+        {
+        }
+
+        void right_left_rotate(node_type *node)
+        {
+        }
+
+        void left_rotate(node_type *node)
+        {
+        }
+
+        void left_right_rotate(node_type *node)
+        {
+        }
+
         void rotate(node_type *node)
         {
+            if (node->isleft)
+            {
+                if (node->parent->isleft)
+                {
+                    right_rotate(node->parent->parent);
+                    node->color = 1;
+                    node->parent->color = 0;
+                    if (node->parent->right)
+                        node->parent->right->color = 1;
+                }
+                else
+                {
+                    right_left_rotate(node->parent->parent);
+                    node->color = 0;
+                    node->right->color = 1;
+                    node->left->color = 1;
+                }
+            }
+            else
+            {
+                if (node->parent->isleft)
+                {
+                    left_rotate(node->parent->parent);
+                    node->color = 1;
+                    node->parent->color = 0;
+                    if (node->parent->right)
+                        node->parent->right->color = 1;
+                }
+                else
+                {
+                    left_right_rotate(node->parent->parent);
+                    node->color = 0;
+                    node->right->color = 1;
+                    node->left->color = 1;
+                }
+            }
         }
 
         void correct_tree(node_type *node)
