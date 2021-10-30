@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 15:59:33 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/30 13:25:39 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/30 14:02:45 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,13 +99,13 @@ namespace ft
             }
             else
             {
-                if (node->parent->isleft)
+                if (!node->parent->isleft)
                 {
                     left_rotate(node->parent->parent);
                     node->color = 1;
                     node->parent->color = 0;
-                    if (node->parent->right)
-                        node->parent->right->color = 1;
+                    if (node->parent->left)
+                        node->parent->left->color = 1;
                 }
                 else
                 {

@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 15:03:08 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/28 11:03:00 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/30 13:35:57 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ namespace ft
         pair() : first(), second() {}
 
         template <class U, class V>
-        pair(const pair<U, V> &pr) : first(pr.first), second(pr.second) { }
+        pair(const pair<U, V> &pr) : first(pr.first), second(pr.second) {}
 
         pair(const first_type &a, const second_type &b) : first(a), second(b) {}
 
