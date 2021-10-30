@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 15:59:33 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/30 14:02:45 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/30 16:14:37 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,16 +61,80 @@ namespace ft
             return ptr;
         }
 
-        void right_rotate(node_type *node)
-        {
-        }
-
         void right_left_rotate(node_type *node)
         {
         }
 
+        void right_rotate(node_type *node)
+        {
+            node_type *tmp = node->left;
+            node->left = tmp->right;
+
+            if (node->left)
+            {
+                node->left->parent = node;
+                node->left->isleft = 1;
+            }
+
+            if (node->parent == nullptr)
+            {
+                // we are the root node
+                this->_root = tmp;
+                tmp->parent = nullptr;
+            }
+            else
+            {
+                tmp->parent = node->parent;
+                if (node->isleft)
+                {
+                    tmp->isleft = 1;
+                    tmp->parent->left = tmp;
+                }
+                else
+                {
+                    tmp->isleft = 0;
+                    tmp->parent->right = tmp;
+                }
+            }
+            tmp->right = node;
+            node->isleft = 0;
+            node->parent = tmp;
+        }
+
         void left_rotate(node_type *node)
         {
+            node_type *tmp = node->right;
+            node->right = tmp->left;
+
+            if (node->right)
+            {
+                node->right->parent = node;
+                node->right->isleft = 0;
+            }
+
+            if (node->parent == nullptr)
+            {
+                // we are the root node
+                this->_root = tmp;
+                tmp->parent = nullptr;
+            }
+            else
+            {
+                tmp->parent = node->parent;
+                if (node->isleft)
+                {
+                    tmp->isleft = 1;
+                    tmp->parent->left = tmp;
+                }
+                else
+                {
+                    tmp->isleft = 0;
+                    tmp->parent->right = tmp;
+                }
+            }
+            tmp->left = node;
+            node->isleft = 1;
+            node->parent = tmp;
         }
 
         void left_right_rotate(node_type *node)
@@ -93,8 +157,10 @@ namespace ft
                 {
                     right_left_rotate(node->parent->parent);
                     node->color = 0;
-                    node->right->color = 1;
-                    node->left->color = 1;
+                    if (node->right)
+                        node->right->color = 1;
+                    if (node->left)
+                        node->left->color = 1;
                 }
             }
             else
@@ -111,8 +177,10 @@ namespace ft
                 {
                     left_right_rotate(node->parent->parent);
                     node->color = 0;
-                    node->right->color = 1;
-                    node->left->color = 1;
+                    if (node->right)
+                        node->right->color = 1;
+                    if (node->left)
+                        node->left->color = 1;
                 }
             }
         }
@@ -123,7 +191,7 @@ namespace ft
             if (node->parent->isleft)
             {
                 // if our aunt is black or null then we rotate | rotation -> node->parent->parent black and its both childs red
-                if (node->parent->parent && (node->parent->parent->right == nullptr || node->parent->parent->right == 0))
+                if (node->parent->parent && (node->parent->parent->right == nullptr || node->parent->parent->right->color == 0))
                     rotate(node);
                 // if aunt is red then we color flip | flip color -> node->parent->parent red and its both childs black
                 else if (node->parent->parent)
@@ -138,7 +206,7 @@ namespace ft
             else
             {
                 // if our aunt is black or null then we rotate | rotation -> node->parent->parent black and its both childs red
-                if (node->parent->parent && (node->parent->parent->left == nullptr || node->parent->parent->left == 0))
+                if (node->parent->parent && (node->parent->parent->left == nullptr || node->parent->parent->left->color == 0))
                     return rotate(node);
                 // if aunt is red then we color flip | flip color -> node->parent->parent red and its both childs black
                 else if (node->parent->parent)
