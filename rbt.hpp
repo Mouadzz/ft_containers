@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 15:59:33 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/31 11:51:46 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/31 12:54:04 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,7 +213,7 @@ namespace ft
             {
                 // if our aunt is black or null then we rotate | rotation -> node->parent->parent black and its both childs red
                 if (node->parent->parent && (node->parent->parent->left == nullptr || node->parent->parent->left->color == 0))
-                    rotate(node);
+                    return rotate(node);
                 // if aunt is red then we color flip | flip color -> node->parent->parent red and its both childs black
                 else if (node->parent->parent)
                 {
@@ -232,7 +232,9 @@ namespace ft
             {
                 // if we have two consecutive red nodes
                 if (node->color == 1 && (node->parent && node->parent->color == 1))
+                {
                     correct_tree(node);
+                }
 
                 // recursive till we reach our route
                 check_color(node->parent);
@@ -242,9 +244,7 @@ namespace ft
         void add_new_node(node_type *parent, node_type *new_node)
         {
             // if the new node key is greater than the parent's node key
-            if (ft::my_compare(new_node->data->first, parent->data->first, key_compare()) == 0 &&
-                !(!ft::my_compare(new_node->data->first, parent->data->first, key_compare()) &&
-                  !ft::my_compare(parent->data->first, new_node->data->first, key_compare())))
+            if (ft::my_compare(new_node->data->first, parent->data->first, key_compare()) == 0 && !(!ft::my_compare(new_node->data->first, parent->data->first, key_compare()) && !ft::my_compare(parent->data->first, new_node->data->first, key_compare())))
             {
                 // if right child exist
                 if (parent->right == nullptr)
@@ -302,11 +302,14 @@ namespace ft
         }
 
     public:
-        RBT() {}
+        RBT() : _root(NULL) {}
         ~RBT() {}
 
         void insert(const value_type &val)
         {
+
+            std::cout << "1gegege" << std::endl;
+
             // check if tree is empty
             if (!this->_root)
             {
@@ -321,6 +324,12 @@ namespace ft
 
                 // all new nodes added are red
                 new_node->color = 1;
+
+                std::cout << "1" << std::endl;
+
+                std::cout << this->_root->data->first << std::endl;
+
+                std::cout << "2" << std::endl;
 
                 // add the new node as a leaf
                 add_new_node(this->_root, new_node);
