@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 15:59:33 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/30 16:14:37 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/10/31 11:51:46 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,19 @@ namespace ft
 
         void right_left_rotate(node_type *node)
         {
+            right_rotate(node->right);
+            left_rotate(node);
+        }
+
+        void left_right_rotate(node_type *node)
+        {
+            left_rotate(node->left);
+            right_rotate(node);
         }
 
         void right_rotate(node_type *node)
         {
+
             node_type *tmp = node->left;
             node->left = tmp->right;
 
@@ -137,10 +146,6 @@ namespace ft
             node->parent = tmp;
         }
 
-        void left_right_rotate(node_type *node)
-        {
-        }
-
         void rotate(node_type *node)
         {
             if (node->isleft)
@@ -193,6 +198,7 @@ namespace ft
                 // if our aunt is black or null then we rotate | rotation -> node->parent->parent black and its both childs red
                 if (node->parent->parent && (node->parent->parent->right == nullptr || node->parent->parent->right->color == 0))
                     rotate(node);
+
                 // if aunt is red then we color flip | flip color -> node->parent->parent red and its both childs black
                 else if (node->parent->parent)
                 {
@@ -207,7 +213,7 @@ namespace ft
             {
                 // if our aunt is black or null then we rotate | rotation -> node->parent->parent black and its both childs red
                 if (node->parent->parent && (node->parent->parent->left == nullptr || node->parent->parent->left->color == 0))
-                    return rotate(node);
+                    rotate(node);
                 // if aunt is red then we color flip | flip color -> node->parent->parent red and its both childs black
                 else if (node->parent->parent)
                 {
@@ -222,10 +228,10 @@ namespace ft
         void check_color(node_type *node)
         {
             // stop our recursive when we reach our route
-            if (node != this->_root)
+            if (node != this->_root && node != nullptr)
             {
                 // if we have two consecutive red nodes
-                if (node->color == 1 && node->parent->color == 1)
+                if (node->color == 1 && (node->parent && node->parent->color == 1))
                     correct_tree(node);
 
                 // recursive till we reach our route
@@ -271,6 +277,7 @@ namespace ft
                     // if parent's child exists then we add it to our parent's left child
                     return add_new_node(parent->left, new_node);
             }
+            check_color(new_node);
         }
 
         void print_helper(const std::string &prefix, const node_type *node, bool isLeft)
@@ -283,10 +290,14 @@ namespace ft
 
                 // print the value of the node
                 std::cout << node->data->first << " ";
-                std::cout << (isLeft ? "(L)" : "(R)") << std::endl;
+
+                if (node == this->_root)
+                    std::cout << "(Root)" << std::endl;
+                else
+                    std::cout << (isLeft ? "(R)" : "(L)") << std::endl;
                 // enter the next tree level - left and right branch
-                print_helper(prefix + (isLeft ? "│   " : "    "), node->left, true);
-                print_helper(prefix + (isLeft ? "│   " : "    "), node->right, false);
+                print_helper(prefix + (isLeft ? "│   " : "    "), node->right, true);
+                print_helper(prefix + (isLeft ? "│   " : "    "), node->left, false);
             }
         }
 
