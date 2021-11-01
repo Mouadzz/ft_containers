@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 15:59:33 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/11/01 15:44:14 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/11/01 15:47:14 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -347,7 +347,7 @@ namespace ft
             node->parent = NULL;
             node->parent = NULL;
             this->_node_allocator.destroy(node);
-            this->_node_allocator.deallocate(node, 1);
+            this->_node_allocator.deallocate(node, 1); 
         }
 
         void remove_helper(node_type *node)
