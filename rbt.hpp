@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 15:59:33 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/31 12:54:04 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/11/01 15:44:14 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ namespace ft
     {
         typedef ft::pair<const Key, T> value_type;
         typedef ft::Node<Key, T> node_type;
+        typedef Key key_type;
         typedef Alloc allocator_type;
         typedef Compare key_compare;
         typedef typename Alloc::template rebind<ft::Node<Key, T> >::other allocator_other_type;
@@ -53,9 +54,9 @@ namespace ft
             ptr = this->_node_allocator.allocate(1);
             ptr->color = 0;
             ptr->isleft = 1;
-            ptr->parent = nullptr;
-            ptr->left = nullptr;
-            ptr->right = nullptr;
+            ptr->parent = NULL;
+            ptr->left = NULL;
+            ptr->right = NULL;
             ptr->data = this->_allocator.allocate(1);
             this->_allocator.construct(ptr->data, val);
             return ptr;
@@ -85,11 +86,11 @@ namespace ft
                 node->left->isleft = 1;
             }
 
-            if (node->parent == nullptr)
+            if (node->parent == NULL)
             {
                 // we are the root node
                 this->_root = tmp;
-                tmp->parent = nullptr;
+                tmp->parent = NULL;
             }
             else
             {
@@ -121,11 +122,11 @@ namespace ft
                 node->right->isleft = 0;
             }
 
-            if (node->parent == nullptr)
+            if (node->parent == NULL)
             {
                 // we are the root node
                 this->_root = tmp;
-                tmp->parent = nullptr;
+                tmp->parent = NULL;
             }
             else
             {
@@ -196,7 +197,7 @@ namespace ft
             if (node->parent->isleft)
             {
                 // if our aunt is black or null then we rotate | rotation -> node->parent->parent black and its both childs red
-                if (node->parent->parent && (node->parent->parent->right == nullptr || node->parent->parent->right->color == 0))
+                if (node->parent->parent && (node->parent->parent->right == NULL || node->parent->parent->right->color == 0))
                     rotate(node);
 
                 // if aunt is red then we color flip | flip color -> node->parent->parent red and its both childs black
@@ -212,7 +213,7 @@ namespace ft
             else
             {
                 // if our aunt is black or null then we rotate | rotation -> node->parent->parent black and its both childs red
-                if (node->parent->parent && (node->parent->parent->left == nullptr || node->parent->parent->left->color == 0))
+                if (node->parent->parent && (node->parent->parent->left == NULL || node->parent->parent->left->color == 0))
                     return rotate(node);
                 // if aunt is red then we color flip | flip color -> node->parent->parent red and its both childs black
                 else if (node->parent->parent)
@@ -228,7 +229,7 @@ namespace ft
         void check_color(node_type *node)
         {
             // stop our recursive when we reach our route
-            if (node != this->_root && node != nullptr)
+            if (node != this->_root && node != NULL)
             {
                 // if we have two consecutive red nodes
                 if (node->color == 1 && (node->parent && node->parent->color == 1))
@@ -247,7 +248,7 @@ namespace ft
             if (ft::my_compare(new_node->data->first, parent->data->first, key_compare()) == 0 && !(!ft::my_compare(new_node->data->first, parent->data->first, key_compare()) && !ft::my_compare(parent->data->first, new_node->data->first, key_compare())))
             {
                 // if right child exist
-                if (parent->right == nullptr)
+                if (parent->right == NULL)
                 {
                     // add our new node as a right child
                     parent->right = new_node;
@@ -264,7 +265,7 @@ namespace ft
             else if (ft::my_compare(new_node->data->first, parent->data->first, key_compare()) == 1)
             {
                 // if left child exist
-                if (parent->left == nullptr)
+                if (parent->left == NULL)
                 {
                     // add our new node as a left child
                     parent->left = new_node;
@@ -282,7 +283,7 @@ namespace ft
 
         void print_helper(const std::string &prefix, const node_type *node, bool isLeft)
         {
-            if (node != nullptr)
+            if (node != NULL)
             {
                 std::cout << prefix;
 
@@ -301,15 +302,106 @@ namespace ft
             }
         }
 
+        node_type *search_node_helper(node_type *node, const key_type &k)
+        {
+            if (node == NULL)
+                return NULL;
+
+            if (!ft::my_compare(k, node->data->first, key_compare()) && !ft::my_compare(node->data->first, k, key_compare()))
+                return node;
+            else if (ft::my_compare(k, node->data->first, key_compare()) == 1)
+                return search_node_helper(node->left, k);
+            else
+                return search_node_helper(node->right, k);
+        }
+
+        node_type *get_successor(node_type *node)
+        {
+            node_type *current = node;
+
+            // loop to find the leftmost leaf
+            while (current->left != NULL)
+                current = current->left;
+            return current;
+        }
+
+        node_type *get_predecessor(node_type *node)
+        {
+            node_type *current = node;
+
+            // loop to find the rightmost leaf
+            while (current->right != NULL)
+                current = current->right;
+            return current;
+        }
+
+        void free_node(node_type *node)
+        {
+            if (node->isleft == 1)
+                node->parent->left = NULL;
+            else
+                node->parent->right = NULL;
+            this->_allocator.destroy(node->data);
+            this->_allocator.deallocate(node->data, 1);
+            node->left = NULL;
+            node->parent = NULL;
+            node->parent = NULL;
+            this->_node_allocator.destroy(node);
+            this->_node_allocator.deallocate(node, 1);
+        }
+
+        void remove_helper(node_type *node)
+        {
+            if (node->left == NULL && node->right == NULL)
+            {
+                if (node->color == 0)
+                {
+                    std::cout << "node is black -> check all cases\n";
+                }
+                else
+                {
+                    std::cout << "node is red -> delete node and free\n";
+                    free_node(node);
+                }
+            }
+            else
+            {
+                node_type *ret;
+                if (node->right != NULL)
+                {
+                    // smalest key in right subtree
+                    ret = get_successor(node->right);
+                    std::cout << "successor -> " << ret->data->first << std::endl;
+
+                    // replace our node pair
+                    this->_allocator.destroy(node->data);
+                    this->_allocator.construct(node->data, *ret->data);
+
+                    // recursion
+                    remove_helper(ret);
+                }
+                else
+                {
+                    // largest key in left subtree
+                    ret = get_predecessor(node->left);
+                    std::cout << "predecessor -> " << ret->data->first << std::endl;
+
+                    // replace our node pair
+                    this->_allocator.destroy(node->data);
+                    this->_allocator.construct(node->data, *ret->data);
+
+                    // recursion
+                    remove_helper(ret);
+                }
+            }
+        }
+
     public:
         RBT() : _root(NULL) {}
         ~RBT() {}
 
         void insert(const value_type &val)
         {
-
-            std::cout << "1gegege" << std::endl;
-
             // check if tree is empty
             if (!this->_root)
             {
@@ -325,16 +417,23 @@ namespace ft
                 // all new nodes added are red
                 new_node->color = 1;
 
-                std::cout << "1" << std::endl;
-
-                std::cout << this->_root->data->first << std::endl;
-
-                std::cout << "2" << std::endl;
-
                 // add the new node as a leaf
                 add_new_node(this->_root, new_node);
                 len++;
             }
+        }
+
+        void remove(const key_type &k)
+        {
+            std::cout << "removing -> " << k << std::endl;
+            node_type *node = search_node(k);
+            if (node != NULL)
+                remove_helper(node);
+        }
+
+        node_type *search_node(const key_type &k)
+        {
+            return search_node_helper(this->_root, k);
         }
 
         void print_tree()

@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 15:06:14 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/31 11:57:53 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/11/01 11:33:26 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 
 namespace ft
 {
-
     template <class Key,                                            // map::key_type
               class T,                                              // map::mapped_type
               class Compare = std::less<Key>,                       // map::key_compare
@@ -40,14 +39,19 @@ namespace ft
         explicit map(const key_compare &comp = key_compare(),
                      const allocator_type &alloc = allocator_type()) : _allocator(alloc) {}
 
-        void insert(const value_type& val)
+        void insert(const value_type &val)
         {
             tree.insert(val);
         }
 
+        void remove(const key_type &k)
+        {
+            tree.remove(k);
+        }
+
         void print_tree()
         {
-           tree.print_tree(); 
+            tree.print_tree();
         }
     };
 }

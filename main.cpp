@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 11:07:30 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/31 12:51:42 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/11/01 13:13:06 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 #include "stack.hpp"
 #include <stack>
 #include "map.hpp"
+#include <fstream>
+#include <map>
 
 #define BLUE "\e[0;34m"
 #define RED "\e[0;31m"
@@ -3634,17 +3636,20 @@ int main(void)
 
   /* ------------------ Map ------------------*/
 
+  // ----------------------------------
+
   ft::map<int, int> mymap;
 
-  mymap.insert(ft::make_pair(50, 0));
-  mymap.insert(ft::make_pair(20, 0));
-  mymap.insert(ft::make_pair(21, 0));
-  mymap.insert(ft::make_pair(43, 0));
-  mymap.insert(ft::make_pair(32, 0));
-  mymap.insert(ft::make_pair(15, 0));
-  mymap.insert(ft::make_pair(14, 0));
-  mymap.insert(ft::make_pair(12, 0));
+  for (int i = 0; i < 10; i++)
+  {
+    mymap.insert(ft::make_pair(i, 0));
+  }
+
+  mymap.remove(7);
+
+  std::cout << std::endl;
 
   mymap.print_tree();
+
   return 0;
 }
