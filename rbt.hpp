@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   RBT.hpp                                            :+:      :+:    :+:   */
+/*   rbt.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 15:59:33 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/11/01 16:30:01 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/11/02 12:33:16 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ namespace ft
         Node *right;
         int isleft;
         int color;
+        int isdb;
     };
 
     template <class Key,
@@ -57,6 +58,7 @@ namespace ft
             ptr->parent = NULL;
             ptr->left = NULL;
             ptr->right = NULL;
+            ptr->isdb = 0;
             ptr->data = this->_allocator.allocate(1);
             this->_allocator.construct(ptr->data, val);
             return ptr;
@@ -347,7 +349,93 @@ namespace ft
             node->parent = NULL;
             node->parent = NULL;
             this->_node_allocator.destroy(node);
-            this->_node_allocator.deallocate(node, 1); 
+            this->_node_allocator.deallocate(node, 1);
+            node = NULL;
+        }
+
+        // case 3 -> if db's sibling is black & both its children are black
+        void case_3(node_type *node)
+        {
+            node_type *tmp = NULL;
+            if (node->isleft)
+            {
+                if (!node->parent->right ||
+                    (node->parent->right->color == 0 &&
+                     (!node->parent->right->left || node->parent->right->left->color == 0) &&
+                     (!node->parent->right->right || node->parent->right->right->color == 0)))
+                {
+                    // remove db
+                    node->isdb = 0;
+
+                    // add black to its parent
+                    // - if parent is black it becomes double black
+                    if (node->parent->color == 0)
+                    {
+                        node->parent->isdb = 1;
+                        tmp = node->parent;
+                    }
+                    // - if parent is red it becomes black
+                    else
+                        node->parent->color = 0;
+
+                    // make sibling red
+                    if (node->parent->right)
+                        node->parent->right->color = 1;
+
+                    // delete node
+                    free_node(node);
+
+                    if (tmp)
+                        remove_black_node(tmp);
+                }
+            }
+            else
+            {
+                if (!node->parent->left ||
+                    (node->parent->left->color == 0 &&
+                     (!node->parent->left->left || node->parent->left->left->color == 0) &&
+                     (!node->parent->left->right || node->parent->left->right->color == 0)))
+                {
+                    // remove db
+                    node->isdb = 0;
+
+                    // add black to its parent
+                    // - if parent is black it becomes double black
+                    if (node->parent->color == 0)
+                    {
+                        node->parent->isdb = 1;
+                        tmp = node->parent;
+                    }
+                    // - if parent is red it becomes black
+                    else
+                        node->parent->color = 0;
+
+                    // make sibling red
+                    if (node->parent->left)
+                        node->parent->left->color = 1;
+
+                    // delete node
+                    free_node(node);
+
+                    if (tmp)
+                        remove_black_node(tmp);
+                }
+            }
+        }
+
+        void remove_black_node(node_type *node)
+        {
+            // case 2 -> if root is DB, just remove DB
+            if (node == this->_root)
+            {
+                std::cout << "route is double black -> remove db !\n";
+                if (this->_root->isdb)
+                    this->_root->isdb = 0;
+            }
+            else
+            {
+                case_3(node);
+            }
         }
 
         void remove_helper(node_type *node)
@@ -357,9 +445,12 @@ namespace ft
                 if (node->color == 0)
                 {
                     std::cout << "node is black -> check all cases\n";
+                    node->isdb = 1;
+                    remove_black_node(node);
                 }
                 else
                 {
+                    //  case 1 -> if node to be deleted is red  just delete it
                     std::cout << "node is red -> delete node and free\n";
                     free_node(node);
                 }
@@ -371,7 +462,6 @@ namespace ft
                 {
                     // smalest key in right subtree
                     ret = get_successor(node->right);
-                    std::cout << "successor -> " << ret->data->first << std::endl;
 
                     // replace our node pair
                     this->_allocator.destroy(node->data);
@@ -384,7 +474,6 @@ namespace ft
                 {
                     // largest key in left subtree
                     ret = get_predecessor(node->left);
-                    std::cout << "predecessor -> " << ret->data->first << std::endl;
 
                     // replace our node pair
                     this->_allocator.destroy(node->data);
@@ -425,7 +514,6 @@ namespace ft
 
         void remove(const key_type &k)
         {
-            std::cout << "removing -> " << k << std::endl;
             node_type *node = search_node(k);
             if (node != NULL)
                 remove_helper(node);

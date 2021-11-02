@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 11:07:30 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/11/01 16:31:52 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/11/02 12:22:44 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -3645,7 +3645,7 @@ int main(void)
     mymap.insert(ft::make_pair(i, 0));
   }
 
-  mymap.remove(7);
+  mymap.remove(0);
 
   std::cout << std::endl;
 
