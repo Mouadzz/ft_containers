@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 15:59:33 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/11/02 12:33:16 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/11/02 17:50:59 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -353,6 +353,46 @@ namespace ft
             node = NULL;
         }
 
+        void case_6(node_type *node, bool isleft)
+        {
+            // DB sibling is black , sibling's child who is far from DB is red, but nearest child to DB is black.
+            node_type *tmp = NULL;
+            if (isleft)
+            {
+                // swap parent and siblings color
+                int color = node->parent->color;
+                node->parent->color = node->parent->right->color;
+                node->parent->right->color = color;
+
+                // rotate parent to DB direction
+                left_rotate(node->parent);
+
+                // remove db
+                node->isdb = 0;
+
+                // change color of the sibling's red child (farest one)
+                if (node->parent->parent->right && node->parent->parent->right->color == 1)
+                    node->parent->parent->right->color = 0;
+            }
+            else
+            {
+                // swap parent and siblings color
+                int color = node->parent->color;
+                node->parent->color = node->parent->left->color;
+                node->parent->left->color = color;
+
+                // rotate parent to DB direction
+                right_rotate(node->parent);
+
+                // remove db
+                node->isdb = 0;
+
+                // change color of the sibling's red child (farest one)
+                if (node->parent->parent->left && node->parent->parent->left->color == 1)
+                    node->parent->parent->left->color = 0;
+            }
+        }
+
         // case 3 -> if db's sibling is black & both its children are black
         void case_3(node_type *node)
         {
@@ -388,6 +428,41 @@ namespace ft
                     if (tmp)
                         remove_black_node(tmp);
                 }
+                // case 4 -> DB sibling is red.
+                else if (node->parent->right && node->parent->right->color == 1)
+                {
+                    // swap colors of parent and its sibling
+                    int color = node->parent->color;
+                    node->parent->color = node->parent->right->color;
+                    node->parent->right->color = color;
+
+                    // rotate parent in DB direction
+                    left_rotate(node->parent);
+
+                    remove_black_node(node);
+                }
+                // case 5 -> DB sibling is black , sibling's child who is far from DB is black, but nearest child to DB is red.
+                else if (node->parent->right &&
+                         node->parent->right->color == 0 &&
+                         ((!node->parent->right->right || node->parent->right->right->color == 0) &&
+                          (node->parent->right->left && node->parent->right->left->color == 1)))
+                {
+                    // swap siblings color with nearest to DB
+                    int color = node->parent->right->color;
+                    node->parent->right->color = node->parent->right->left->color;
+                    node->parent->right->left->color = color;
+
+                    right_rotate(node->parent->right);
+
+                    case_6(node, true);
+                }
+                else if (node->parent->right &&
+                         node->parent->right->color == 0 &&
+                         ((!node->parent->right->left || node->parent->right->left->color == 0) &&
+                          (node->parent->right->right && node->parent->right->right->color == 1)))
+                {
+                    case_6(node, true);
+                }
             }
             else
             {
@@ -420,6 +495,41 @@ namespace ft
                     if (tmp)
                         remove_black_node(tmp);
                 }
+                // case 4
+                else if (node->parent->left && node->parent->left->color == 1)
+                {
+                    // swap colors of parent and its sibling
+                    int color = node->parent->color;
+                    node->parent->color = node->parent->left->color;
+                    node->parent->left->color = color;
+
+                    // rotate parent in DB direction
+                    right_rotate(node->parent);
+
+                    remove_black_node(node);
+                }
+                // case 5 -> DB sibling is black , sibling's child who is far from DB is black, but nearest child to DB is red.
+                else if (node->parent->left &&
+                         node->parent->left->color == 0 &&
+                         ((!node->parent->left->left || node->parent->left->left->color == 0) &&
+                          (node->parent->left->right && node->parent->left->right->color == 1)))
+                {
+                    // swap siblings color with nearest to DB
+                    int color = node->parent->left->color;
+                    node->parent->left->color = node->parent->left->right->color;
+                    node->parent->left->right->color = color;
+
+                    left_rotate(node->parent->left);
+
+                    case_6(node, false);
+                }
+                else if (node->parent->left &&
+                         node->parent->left->color == 0 &&
+                         ((!node->parent->left->right || node->parent->left->right->color == 0) &&
+                          (node->parent->left->left && node->parent->left->left->color == 1)))
+                {
+                    case_6(node, false);
+                }
             }
         }
 
@@ -433,9 +543,7 @@ namespace ft
                     this->_root->isdb = 0;
             }
             else
-            {
                 case_3(node);
-            }
         }
 
         void remove_helper(node_type *node)
