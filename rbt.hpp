@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 15:59:33 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/11/02 17:50:59 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/11/03 16:12:41 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -297,7 +297,7 @@ namespace ft
                 if (node == this->_root)
                     std::cout << "(Root)" << std::endl;
                 else
-                    std::cout << (isLeft ? "(R)" : "(L)") << std::endl;
+                    std::cout << (isLeft ? "(R)" : "(L)") << ((node->color == 1) ? "(Red)" : "(Black)") << std::endl;
                 // enter the next tree level - left and right branch
                 print_helper(prefix + (isLeft ? "│   " : "    "), node->right, true);
                 print_helper(prefix + (isLeft ? "│   " : "    "), node->left, false);
@@ -339,10 +339,13 @@ namespace ft
 
         void free_node(node_type *node)
         {
-            if (node->isleft == 1)
-                node->parent->left = NULL;
-            else
-                node->parent->right = NULL;
+            if (node != this->_root)
+            {
+                if (node->isleft == 1)
+                    node->parent->left = NULL;
+                else
+                    node->parent->right = NULL;
+            }
             this->_allocator.destroy(node->data);
             this->_allocator.deallocate(node->data, 1);
             node->left = NULL;
@@ -353,223 +356,249 @@ namespace ft
             node = NULL;
         }
 
-        void case_6(node_type *node, bool isleft)
-        {
-            // DB sibling is black , sibling's child who is far from DB is red, but nearest child to DB is black.
-            node_type *tmp = NULL;
-            if (isleft)
-            {
-                // swap parent and siblings color
-                int color = node->parent->color;
-                node->parent->color = node->parent->right->color;
-                node->parent->right->color = color;
-
-                // rotate parent to DB direction
-                left_rotate(node->parent);
-
-                // remove db
-                node->isdb = 0;
-
-                // change color of the sibling's red child (farest one)
-                if (node->parent->parent->right && node->parent->parent->right->color == 1)
-                    node->parent->parent->right->color = 0;
-            }
-            else
-            {
-                // swap parent and siblings color
-                int color = node->parent->color;
-                node->parent->color = node->parent->left->color;
-                node->parent->left->color = color;
-
-                // rotate parent to DB direction
-                right_rotate(node->parent);
-
-                // remove db
-                node->isdb = 0;
-
-                // change color of the sibling's red child (farest one)
-                if (node->parent->parent->left && node->parent->parent->left->color == 1)
-                    node->parent->parent->left->color = 0;
-            }
-        }
-
-        // case 3 -> if db's sibling is black & both its children are black
-        void case_3(node_type *node)
-        {
-            node_type *tmp = NULL;
-            if (node->isleft)
-            {
-                if (!node->parent->right ||
-                    (node->parent->right->color == 0 &&
-                     (!node->parent->right->left || node->parent->right->left->color == 0) &&
-                     (!node->parent->right->right || node->parent->right->right->color == 0)))
-                {
-                    // remove db
-                    node->isdb = 0;
-
-                    // add black to its parent
-                    // - if parent is black it becomes double black
-                    if (node->parent->color == 0)
-                    {
-                        node->parent->isdb = 1;
-                        tmp = node->parent;
-                    }
-                    // - if parent is red it becomes black
-                    else
-                        node->parent->color = 0;
-
-                    // make sibling red
-                    if (node->parent->right)
-                        node->parent->right->color = 1;
-
-                    // delete node
-                    free_node(node);
-
-                    if (tmp)
-                        remove_black_node(tmp);
-                }
-                // case 4 -> DB sibling is red.
-                else if (node->parent->right && node->parent->right->color == 1)
-                {
-                    // swap colors of parent and its sibling
-                    int color = node->parent->color;
-                    node->parent->color = node->parent->right->color;
-                    node->parent->right->color = color;
-
-                    // rotate parent in DB direction
-                    left_rotate(node->parent);
-
-                    remove_black_node(node);
-                }
-                // case 5 -> DB sibling is black , sibling's child who is far from DB is black, but nearest child to DB is red.
-                else if (node->parent->right &&
-                         node->parent->right->color == 0 &&
-                         ((!node->parent->right->right || node->parent->right->right->color == 0) &&
-                          (node->parent->right->left && node->parent->right->left->color == 1)))
-                {
-                    // swap siblings color with nearest to DB
-                    int color = node->parent->right->color;
-                    node->parent->right->color = node->parent->right->left->color;
-                    node->parent->right->left->color = color;
-
-                    right_rotate(node->parent->right);
-
-                    case_6(node, true);
-                }
-                else if (node->parent->right &&
-                         node->parent->right->color == 0 &&
-                         ((!node->parent->right->left || node->parent->right->left->color == 0) &&
-                          (node->parent->right->right && node->parent->right->right->color == 1)))
-                {
-                    case_6(node, true);
-                }
-            }
-            else
-            {
-                if (!node->parent->left ||
-                    (node->parent->left->color == 0 &&
-                     (!node->parent->left->left || node->parent->left->left->color == 0) &&
-                     (!node->parent->left->right || node->parent->left->right->color == 0)))
-                {
-                    // remove db
-                    node->isdb = 0;
-
-                    // add black to its parent
-                    // - if parent is black it becomes double black
-                    if (node->parent->color == 0)
-                    {
-                        node->parent->isdb = 1;
-                        tmp = node->parent;
-                    }
-                    // - if parent is red it becomes black
-                    else
-                        node->parent->color = 0;
-
-                    // make sibling red
-                    if (node->parent->left)
-                        node->parent->left->color = 1;
-
-                    // delete node
-                    free_node(node);
-
-                    if (tmp)
-                        remove_black_node(tmp);
-                }
-                // case 4
-                else if (node->parent->left && node->parent->left->color == 1)
-                {
-                    // swap colors of parent and its sibling
-                    int color = node->parent->color;
-                    node->parent->color = node->parent->left->color;
-                    node->parent->left->color = color;
-
-                    // rotate parent in DB direction
-                    right_rotate(node->parent);
-
-                    remove_black_node(node);
-                }
-                // case 5 -> DB sibling is black , sibling's child who is far from DB is black, but nearest child to DB is red.
-                else if (node->parent->left &&
-                         node->parent->left->color == 0 &&
-                         ((!node->parent->left->left || node->parent->left->left->color == 0) &&
-                          (node->parent->left->right && node->parent->left->right->color == 1)))
-                {
-                    // swap siblings color with nearest to DB
-                    int color = node->parent->left->color;
-                    node->parent->left->color = node->parent->left->right->color;
-                    node->parent->left->right->color = color;
-
-                    left_rotate(node->parent->left);
-
-                    case_6(node, false);
-                }
-                else if (node->parent->left &&
-                         node->parent->left->color == 0 &&
-                         ((!node->parent->left->right || node->parent->left->right->color == 0) &&
-                          (node->parent->left->left && node->parent->left->left->color == 1)))
-                {
-                    case_6(node, false);
-                }
-            }
-        }
-
         void remove_black_node(node_type *node)
         {
+            node_type *tmp = NULL;
             // case 2 -> if root is DB, just remove DB
-            if (node == this->_root)
+            if (!node->parent)
             {
-                std::cout << "route is double black -> remove db !\n";
                 if (this->_root->isdb)
                     this->_root->isdb = 0;
             }
             else
-                case_3(node);
+            {
+                if (node->isleft)
+                {
+                    // case 3 -> if db's sibling is black & both its children are black
+                    if (!node->parent->right ||
+                        (node->parent->right->color == 0 &&
+                         (!node->parent->right->left || node->parent->right->left->color == 0) &&
+                         (!node->parent->right->right || node->parent->right->right->color == 0)))
+                    {
+                        // std::cout << "case 3\n";
+
+                        // remove db
+                        node->isdb = 0;
+
+                        // add black to its parent
+                        // - if parent is black it becomes double black
+                        if (node->parent->color == 0)
+                        {
+                            node->parent->isdb = 1;
+                            tmp = node->parent;
+                        }
+                        // - if parent is red it becomes black
+                        else
+                            node->parent->color = 0;
+
+                        // make sibling red
+                        if (node->parent->right)
+                            node->parent->right->color = 1;
+
+                        if (tmp)
+                            remove_black_node(tmp);
+                        return;
+                    }
+                    // case 4 -> DB sibling is red.
+                    else if (node->parent->right && node->parent->right->color == 1)
+                    {
+                        // std::cout << "case 4\n";
+
+                        // swap colors of parent and its sibling
+                        int color = node->parent->color;
+                        node->parent->color = node->parent->right->color;
+                        node->parent->right->color = color;
+
+                        // rotate parent in DB direction
+                        left_rotate(node->parent);
+
+                        remove_black_node(node);
+                    }
+                    // case 5 -> DB sibling is black , sibling's child who is far from DB is black, but nearest child to DB is red.
+                    else if (node->parent->right &&
+                             node->parent->right->color == 0 &&
+                             (node->parent->right->left && node->parent->right->left->color == 1))
+                    {
+                        // std::cout << "case 5 + 6\n";
+
+                        // swap siblings color with nearest to DB
+                        int color = node->parent->right->color;
+                        node->parent->right->color = node->parent->right->left->color;
+                        node->parent->right->left->color = color;
+
+                        right_rotate(node->parent->right);
+
+                        // swap parent and siblings color
+                        color = node->parent->color;
+                        node->parent->color = node->parent->right->color;
+                        node->parent->right->color = color;
+
+                        // rotate parent to DB direction
+                        left_rotate(node->parent);
+
+                        // remove db
+                        node->isdb = 0;
+
+                        // change color of the sibling's red child (farest one)
+                        if (node->parent->parent->right && node->parent->parent->right->color == 1)
+                            node->parent->parent->right->color = 0;
+                    }
+                    else if (node->parent->right &&
+                             node->parent->right->color == 0 &&
+                             (node->parent->right->right && node->parent->right->right->color == 1))
+                    {
+                        // std::cout << "case 6\n";
+
+                        // swap parent and siblings color
+                        int color = node->parent->color;
+                        node->parent->color = node->parent->right->color;
+                        node->parent->right->color = color;
+
+                        // rotate parent to DB direction
+                        left_rotate(node->parent);
+
+                        // remove db
+                        node->isdb = 0;
+
+                        // change color of the sibling's red child (farest one)
+                        if (node->parent->parent->right && node->parent->parent->right->color == 1)
+                            node->parent->parent->right->color = 0;
+                    }
+                }
+                else
+                {
+                    if (!node->parent->left ||
+                        (node->parent->left->color == 0 &&
+                         (!node->parent->left->left || node->parent->left->left->color == 0) &&
+                         (!node->parent->left->right || node->parent->left->right->color == 0)))
+                    {
+                        // std::cout << "case 3\n";
+
+                        // remove db
+                        node->isdb = 0;
+
+                        // add black to its parent
+                        // - if parent is black it becomes double black
+                        if (node->parent->color == 0)
+                        {
+                            node->parent->isdb = 1;
+                            tmp = node->parent;
+                        }
+                        // - if parent is red it becomes black
+                        else
+                            node->parent->color = 0;
+
+                        // make sibling red
+                        if (node->parent->left)
+                            node->parent->left->color = 1;
+
+                        if (tmp)
+                            remove_black_node(tmp);
+                        return;
+                    }
+                    // case 4 -> DB sibling is red.
+                    else if (node->parent->left && node->parent->left->color == 1)
+                    {
+                        // std::cout << "case 4\n";
+
+                        // swap colors of parent and its sibling
+                        int color = node->parent->color;
+                        node->parent->color = node->parent->left->color;
+                        node->parent->left->color = color;
+
+                        // rotate parent in DB direction
+                        right_rotate(node->parent);
+
+                        remove_black_node(node);
+                    }
+                    // case 5 -> DB sibling is black , sibling's child who is far from DB is black, but nearest child to DB is red.
+                    else if (node->parent->left &&
+                             node->parent->left->color == 0 &&
+                             ((!node->parent->left->left || node->parent->left->left->color == 0) &&
+                              (node->parent->left->right && node->parent->left->right->color == 1)))
+                    {
+                        // std::cout << "case 5 + 6\n";
+
+                        // swap siblings color with nearest to DB
+                        int color = node->parent->left->color;
+                        node->parent->left->color = node->parent->left->right->color;
+                        node->parent->left->right->color = color;
+
+                        left_rotate(node->parent->left);
+
+                        // swap parent and siblings color
+                        color = node->parent->color;
+                        node->parent->color = node->parent->left->color;
+                        node->parent->left->color = color;
+
+                        // rotate parent to DB direction
+                        right_rotate(node->parent);
+
+                        // remove db
+                        node->isdb = 0;
+
+                        // change color of the sibling's red child (farest one)
+                        if (node->parent->parent->left && node->parent->parent->left->color == 1)
+                            node->parent->parent->left->color = 0;
+                    }
+                    else if (node->parent->left &&
+                             node->parent->left->color == 0 &&
+                             ((!node->parent->left->right || node->parent->left->right->color == 0) &&
+                              (node->parent->left->left && node->parent->left->left->color == 1)))
+                    {
+                        // std::cout << "case 6\n";
+
+                        // swap parent and siblings color
+                        int color = node->parent->color;
+                        node->parent->color = node->parent->left->color;
+                        node->parent->left->color = color;
+
+                        // rotate parent to DB direction
+                        right_rotate(node->parent);
+
+                        // remove db
+                        node->isdb = 0;
+
+                        // change color of the sibling's red child (farest one)
+                        if (node->parent->parent->left && node->parent->parent->left->color == 1)
+                            node->parent->parent->left->color = 0;
+                    }
+                }
+            }
         }
 
         void remove_helper(node_type *node)
         {
             if (node->left == NULL && node->right == NULL)
             {
-                if (node->color == 0)
+                if (node == this->_root)
                 {
-                    std::cout << "node is black -> check all cases\n";
+                    free_node(this->_root);
+                    this->_root = NULL;
+                }
+                else if (node->color == 0)
+                {
+                    // if node to be deleted is black -> check case 2-3-4-5-6
                     node->isdb = 1;
+
                     remove_black_node(node);
+                    free_node(node);
                 }
                 else
                 {
-                    //  case 1 -> if node to be deleted is red  just delete it
-                    std::cout << "node is red -> delete node and free\n";
+                    //  case 1 -> if node to be deleted is red  just delete it.
                     free_node(node);
                 }
             }
             else
             {
                 node_type *ret;
-                if (node->right != NULL)
+                if (node->left != NULL)
                 {
-                    // smalest key in right subtree
-                    ret = get_successor(node->right);
+                    // largest key in left subtree
+                    ret = get_predecessor(node->left);
+
+                    // std::cout << "predecessor -> " << ret->data->first << std::endl;
 
                     // replace our node pair
                     this->_allocator.destroy(node->data);
@@ -580,8 +609,10 @@ namespace ft
                 }
                 else
                 {
-                    // largest key in left subtree
-                    ret = get_predecessor(node->left);
+                    // smalest key in right subtree
+                    ret = get_successor(node->right);
+
+                    // std::cout << "successor -> " << ret->data->first << std::endl;
 
                     // replace our node pair
                     this->_allocator.destroy(node->data);

@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 11:07:30 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/11/02 17:49:37 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/11/03 16:13:01 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -3640,15 +3640,18 @@ int main(void)
 
   ft::map<int, int> mymap;
 
-  for (int i = 0; i < 11; i++)
+  for (int i = 0; i < 1e6; i++)
   {
     mymap.insert(ft::make_pair(i, 0));
   }
-
-  // mymap.remove(4);
+  std::cout << "done inserting " << std::endl;
+  for (int i = 0; i < 1e6; i++)
+  {
+    mymap.remove(i);
+  }
 
   std::cout << std::endl;
-  
+
   mymap.print_tree();
 
   return 0;
