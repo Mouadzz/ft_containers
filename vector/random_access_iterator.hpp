@@ -6,10 +6,9 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 10:53:24 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/11/04 10:53:57 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/11/04 11:08:00 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #pragma once
 namespace ft
@@ -26,7 +25,7 @@ namespace ft
     };
 
     template <class T>
-    class m_iterator : public ft::iterator<std::random_access_iterator_tag, T>
+    class vector_iterator : public ft::iterator<std::random_access_iterator_tag, T>
     {
     public:
         typedef typename ft::iterator<std::random_access_iterator_tag, T>::pointer pointer;
@@ -36,29 +35,29 @@ namespace ft
         pointer _it;
 
     public:
-        m_iterator() : _it(nullptr) {}
+        vector_iterator() : _it(nullptr) {}
 
-        m_iterator(T *arr, size_t pos)
+        vector_iterator(T *arr, size_t pos)
         {
             this->_it = &arr[pos];
         }
 
-        m_iterator(pointer it)
+        vector_iterator(pointer it)
         {
             this->_it = it;
         }
 
-        m_iterator(m_iterator const &copy)
+        vector_iterator(vector_iterator const &copy)
         {
             *this = copy;
         }
 
-        operator m_iterator<const T>() const
+        operator vector_iterator<const T>() const
         {
-            return m_iterator<const T>(this->_it);
+            return vector_iterator<const T>(this->_it);
         }
 
-        m_iterator &operator=(m_iterator const &copy)
+        vector_iterator &operator=(vector_iterator const &copy)
         {
             this->_it = copy._it;
             return *this;
@@ -74,88 +73,88 @@ namespace ft
             return this->_it;
         }
 
-        m_iterator operator++(int)
+        vector_iterator operator++(int)
         {
-            m_iterator tmp(*this);
+            vector_iterator tmp(*this);
             ++this->_it;
             return tmp;
         }
 
-        m_iterator &operator++()
+        vector_iterator &operator++()
         {
             ++this->_it;
             return *this;
         }
 
-        m_iterator operator--(int)
+        vector_iterator operator--(int)
         {
-            m_iterator tmp(*this);
+            vector_iterator tmp(*this);
             --this->_it;
             return tmp;
         }
 
-        m_iterator &operator--()
+        vector_iterator &operator--()
         {
             --this->_it;
             return *this;
         }
 
-        m_iterator operator+(const size_t n)
+        vector_iterator operator+(const size_t n)
         {
-            m_iterator tmp(*this);
+            vector_iterator tmp(*this);
             tmp._it += n;
             return tmp;
         }
 
-        m_iterator operator-(const size_t n) const
+        vector_iterator operator-(const size_t n) const
         {
-            m_iterator tmp(*this);
+            vector_iterator tmp(*this);
             tmp._it -= n;
             return tmp;
         }
 
-        difference_type operator-(const m_iterator &copy) const
+        difference_type operator-(const vector_iterator &copy) const
         {
             return this->_it - copy._it;
         }
 
-        friend bool operator==(const m_iterator &lhs, const m_iterator &rhs)
+        friend bool operator==(const vector_iterator &lhs, const vector_iterator &rhs)
         {
             return (lhs._it == rhs._it);
         }
 
-        friend bool operator!=(const m_iterator &lhs, const m_iterator &rhs)
+        friend bool operator!=(const vector_iterator &lhs, const vector_iterator &rhs)
         {
             return (lhs._it != rhs._it);
         }
 
-        friend bool operator<(const m_iterator &lhs, const m_iterator &rhs)
+        friend bool operator<(const vector_iterator &lhs, const vector_iterator &rhs)
         {
             return (lhs._it < rhs._it);
         }
 
-        friend bool operator>(const m_iterator &lhs, const m_iterator &rhs)
+        friend bool operator>(const vector_iterator &lhs, const vector_iterator &rhs)
         {
             return (lhs._it > rhs._it);
         }
 
-        friend bool operator<=(const m_iterator &lhs, const m_iterator &rhs)
+        friend bool operator<=(const vector_iterator &lhs, const vector_iterator &rhs)
         {
             return (lhs._it <= rhs._it);
         }
 
-        friend bool operator>=(const m_iterator &lhs, const m_iterator &rhs)
+        friend bool operator>=(const vector_iterator &lhs, const vector_iterator &rhs)
         {
             return (lhs._it >= rhs._it);
         }
 
-        m_iterator &operator+=(const size_t n)
+        vector_iterator &operator+=(const size_t n)
         {
             *this = *this + n;
             return *this;
         }
 
-        m_iterator &operator-=(const size_t n)
+        vector_iterator &operator-=(const size_t n)
         {
             *this = *this - n;
             return *this;
@@ -165,13 +164,13 @@ namespace ft
         {
             return this->_it[n];
         }
-        ~m_iterator() {}
+        ~vector_iterator() {}
     };
 
     template <class T>
-    ft::m_iterator<T> operator+(size_t n, const m_iterator<T> &y)
+    ft::vector_iterator<T> operator+(size_t n, const vector_iterator<T> &y)
     {
-        m_iterator<T> tmp(y);
+        vector_iterator<T> tmp(y);
         tmp += n;
         return tmp;
     }

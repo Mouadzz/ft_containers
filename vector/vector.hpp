@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/05 11:01:38 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/11/04 10:54:00 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/11/04 11:08:15 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ namespace ft
         typedef const T &const_reference;
         typedef Alloc allocator_type;
         typedef size_t size_type;
-        typedef ft::m_iterator<T> iterator;
-        typedef ft::m_iterator<const T> const_iterator;
+        typedef ft::vector_iterator<T> iterator;
+        typedef ft::vector_iterator<const T> const_iterator;
         typedef ft::reverse_iterator<iterator> reverse_iterator;
         typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
 
