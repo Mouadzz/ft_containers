@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 15:59:33 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/11/04 10:50:08 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/11/04 13:10:19 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ namespace ft
               class Compare>
     class RBT
     {
+    public:
         typedef ft::pair<const Key, T> value_type;
         typedef ft::Node<Key, T> node_type;
         typedef Key key_type;
@@ -657,6 +658,26 @@ namespace ft
             node_type *node = search_node(k);
             if (node != NULL)
                 remove_helper(node);
+            len--;
+        }
+
+        node_type *leftmost()
+        {
+            if (this->_root)
+                return get_successor(this->_root);
+            return NULL;
+        }
+
+        node_type *rightmost()
+        {
+            if (this->_root)
+                return get_predecessor(this->_root);
+            return NULL;
+        }
+
+        size_t get_size()
+        {
+            return this->len;
         }
 
         node_type *search_node(const key_type &k)
