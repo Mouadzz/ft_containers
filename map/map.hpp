@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 15:06:14 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/11/04 13:23:47 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/11/04 14:03:49 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ namespace ft
               >
     class map
     {
+    public:
         /*----------------[ MEMBER TYPES ]----------------*/
-
         typedef Key key_type;
         typedef T mapped_type;
         typedef ft::pair<const Key, T> value_type;
@@ -56,6 +56,10 @@ namespace ft
             const key_compare &comp = key_compare(),
             const allocator_type &alloc = allocator_type())
         {
+            while (first != last)
+            {
+               
+            }
         }
 
         void insert(const value_type &val)

@@ -6,9 +6,11 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 15:03:08 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/10/30 13:35:57 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/11/04 14:33:48 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#pragma once
 
 namespace ft
 {

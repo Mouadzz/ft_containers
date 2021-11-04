@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 10:43:53 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/11/04 13:23:52 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/11/04 16:59:31 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,22 @@
 
 int main()
 {
-    ft::map<char, int> first;
+    ft::map<int, int> first;
 
-    first.insert(ft::make_pair('a', 10));
-    first.insert(ft::make_pair('b', 30));
-    first.insert(ft::make_pair('c', 50));
-    first.insert(ft::make_pair('d', 70));
+    for (int i = 0; i < 20; i++)
+    {
+        first.insert(ft::make_pair(i, i + 43));
+    }
 
-    ft::map<char, int> second(first.begin(), first.end());
-    
+    // ft::map<char, int> second(first.begin(), first.end());
+
+    ft::map<int, int>::iterator it = first.begin();
+
+    while (it != first.end())
+    {
+        std::cout << it->first << std::endl;
+        it++;
+    }
+
     return 0;
 }
