@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/05 11:01:38 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/11/04 10:47:22 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/11/04 10:54:00 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <memory>
 #include <math.h>
 #include <iostream>
-#include "iterator.hpp"
+#include "random_access_iterator.hpp"
 #include "../utils/utils.hpp"
 #include "reverse_iterator.hpp"
 #include <limits>
