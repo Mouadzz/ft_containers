@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 15:06:14 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/11/01 16:30:00 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/11/04 10:25:25 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,17 @@ namespace ft
 
     public:
         explicit map(const key_compare &comp = key_compare(),
-                     const allocator_type &alloc = allocator_type()) : _allocator(alloc) {}
+                     const allocator_type &alloc = allocator_type())
+        {
+        }
+
+        // template <class InputIterator>
+        // map(InputIterator first, InputIterator last,
+        //     const key_compare &comp = key_compare(),
+        //     const allocator_type &alloc = allocator_type())
+        //     {
+
+        //     }
 
         void insert(const value_type &val)
         {

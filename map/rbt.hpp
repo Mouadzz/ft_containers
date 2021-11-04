@@ -6,13 +6,13 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 15:59:33 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/11/03 16:12:41 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/11/04 10:50:08 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 #include "map.hpp"
-#include "utils.hpp"
+#include "../utils/utils.hpp"
 
 namespace ft
 {
@@ -467,6 +467,7 @@ namespace ft
                 }
                 else
                 {
+                    // case 3 -> if db's sibling is black & both its children are black
                     if (!node->parent->left ||
                         (node->parent->left->color == 0 &&
                          (!node->parent->left->left || node->parent->left->left->color == 0) &&
