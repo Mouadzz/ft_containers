@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 10:52:45 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/11/04 16:57:01 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/11/04 17:14:42 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,25 +94,41 @@ namespace ft
         map_iterator operator++(int)
         {
             map_iterator tmp(*this);
-
             node_type *ret = get_successor(this->_node->right);
-
             if (ret)
-            {
                 this->_node = ret;
-            }
-            else
+            else if (this->_node)
             {
                 if (this->_node->isleft)
                     this->_node = this->_node->parent;
                 else
-                    this->_node = this->_node->parent->parent;
+                {
+                    while (this->_node && !this->_node->isleft)
+                        this->_node = this->_node->parent;
+                    if (this->_node)
+                        this->_node = this->_node->parent;
+                }
             }
             return tmp;
         }
 
         map_iterator &operator++()
         {
+            node_type *ret = get_successor(this->_node->right);
+            if (ret)
+                this->_node = ret;
+            else if (this->_node)
+            {
+                if (this->_node->isleft)
+                    this->_node = this->_node->parent;
+                else
+                {
+                    while (this->_node && !this->_node->isleft)
+                        this->_node = this->_node->parent;
+                    if (this->_node)
+                        this->_node = this->_node->parent;
+                }
+            }
             return *this;
         }
 
