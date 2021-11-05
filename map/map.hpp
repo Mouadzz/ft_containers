@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 15:06:14 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/11/05 20:40:46 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/11/05 20:57:14 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,6 +231,52 @@ namespace ft
                 tree.help_insert(*first);
                 first++;
             }
+        }
+
+        void swap(map &x)
+        {
+            typedef typename ft::RBT<value_type, Key, T, Alloc, Compare>::node_type node_type;
+
+            node_type *tmp = x.tree.get_root();
+            x.tree.set_root(this->tree.get_root());
+            this->tree.set_root(tmp);
+        }
+
+        void erase(iterator position)
+        {
+            this->tree.remove(position->first);
+        }
+
+        size_type erase(const key_type &k)
+        {
+            this->tree.remove(k);
+            return 1;
+        }
+
+        void erase(iterator first, iterator last)
+        {
+            while (first != last)
+            {
+                this->tree.remove(first->first);
+                first++;
+            }
+        }
+
+        iterator find(const key_type &k)
+        {
+            typedef typename ft::RBT<value_type, Key, T, Alloc, Compare>::node_type node_type;
+
+            node_type *ret = tree.search_node(k);
+            iterator tmp(ret);
+            return tmp;
+        }
+        const_iterator find(const key_type &k) const
+        {
+            typedef typename ft::RBT<value_type, Key, T, Alloc, Compare>::node_type node_type;
+
+            node_type *ret = tree.search_node(k);
+            const_iterator tmp(ret);
+            return tmp;
         }
 
         /*----------------[ END OF  MODIFIERS ]----------------*/

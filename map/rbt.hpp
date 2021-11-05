@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 15:59:33 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/11/05 19:42:08 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/11/05 20:47:51 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -634,6 +634,9 @@ namespace ft
         {
             clean_tree();
         }
+
+        node_type *get_root() { return this->_root; };
+        void set_root(node_type *node) { this->_root = node; };
 
         void clean_tree()
         {
