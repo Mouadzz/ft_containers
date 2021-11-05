@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 15:59:33 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/11/04 13:10:19 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/11/05 12:02:12 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -318,7 +318,7 @@ namespace ft
                 return search_node_helper(node->right, k);
         }
 
-        node_type *get_successor(node_type *node)
+        node_type *get_successor(node_type *node) const
         {
             node_type *current = node;
 
@@ -328,7 +328,7 @@ namespace ft
             return current;
         }
 
-        node_type *get_predecessor(node_type *node)
+        node_type *get_predecessor(node_type *node) const
         {
             node_type *current = node;
 
@@ -626,9 +626,30 @@ namespace ft
             }
         }
 
+        node_type *clean_tree_helper(node_type *node)
+        {
+            if (node == NULL)
+                return NULL;
+
+            clean_tree_helper(node->left);
+            clean_tree_helper(node->right);
+
+            free_node(node);
+            return NULL;
+        }
+
     public:
         RBT() : _root(NULL) {}
-        ~RBT() {}
+        ~RBT()
+        {
+            clean_tree();
+        }
+
+        void clean_tree()
+        {
+            clean_tree_helper(this->_root);
+            this->_root = NULL;
+        }
 
         void insert(const value_type &val)
         {
@@ -661,14 +682,14 @@ namespace ft
             len--;
         }
 
-        node_type *leftmost()
+        node_type *leftmost() const
         {
             if (this->_root)
                 return get_successor(this->_root);
             return NULL;
         }
 
-        node_type *rightmost()
+        node_type *rightmost() const
         {
             if (this->_root)
                 return get_predecessor(this->_root);

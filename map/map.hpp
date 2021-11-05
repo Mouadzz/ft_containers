@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 15:06:14 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/11/05 10:22:13 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/11/05 12:02:14 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,33 @@ namespace ft
         typedef ft::map_iterator<const Key, const T> const_iterator;
         typedef size_t size_type;
 
+        class value_compare : public std::binary_function<value_type, value_type, bool>
+        { // in C++98, it is required to inherit binary_function<value_type,value_type,bool>
+            friend class map;
+
+        protected:
+            Compare comp;
+            value_compare(Compare c) : comp(c) {} // constructed with map's comparison object
+        public:
+            typedef bool result_type;
+            typedef value_type first_argument_type;
+            typedef value_type second_argument_type;
+            bool operator()(const value_type &x, const value_type &y) const
+            {
+                return comp(x.first, y.first);
+            }
+        };
+
         /*----------------[ END OF MEMBER TYPES ]----------------*/
 
     private:
-        ft::RBT<const Key, T, Alloc, Compare> tree;
+        ft::RBT<const Key, T, Alloc, Compare>
+            tree;
         allocator_type _allocator;
 
     public:
+        /*----------------[ CONSTRUCTORS ]----------------*/
+
         explicit map(const key_compare &comp = key_compare(),
                      const allocator_type &alloc = allocator_type())
         {
@@ -58,8 +78,30 @@ namespace ft
         {
             while (first != last)
             {
+                tree.insert(*first);
+                first++;
             }
         }
+
+        map(const map &x)
+        {
+            tree.clean_tree();
+            iterator begin(x.tree.leftmost());
+            iterator end(x.tree.rightmost(), x.tree.rightmost()->right);
+            while (begin != end)
+            {
+                tree.insert(*begin);
+                begin++;
+            }
+        }
+
+        // Destroys the container object.
+        ~map()
+        {
+            tree.clean_tree();
+        }
+
+        /*----------------[ END OF CONSTRUCTORS ]----------------*/
 
         void insert(const value_type &val)
         {
