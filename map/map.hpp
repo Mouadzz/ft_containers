@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 15:06:14 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/11/05 12:13:30 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/11/05 13:28:37 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,9 @@
 #include <iostream>
 #include "pair.hpp"
 #include "rbt.hpp"
+#include <math.h>
 #include "bidirectional_iterator.hpp"
+#include "../utils/reverse_iterator.hpp"
 
 namespace ft
 {
@@ -35,8 +37,10 @@ namespace ft
         typedef Alloc allocator_type;
         typedef T &reference;
         typedef const T &const_reference;
-        typedef ft::map_iterator<const Key, T> iterator;
-        typedef ft::map_iterator<const Key, const T> const_iterator;
+        typedef ft::map_iterator<value_type> iterator;
+        typedef ft::map_iterator<value_type> const_iterator;
+        typedef ft::reverse_iterator<iterator> reverse_iterator;
+        typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
         typedef size_t size_type;
 
         class value_compare : public std::binary_function<value_type, value_type, bool>
@@ -59,7 +63,7 @@ namespace ft
         /*----------------[ END OF MEMBER TYPES ]----------------*/
 
     private:
-        ft::RBT<const Key, T, Alloc, Compare>
+        ft::RBT<value_type, Key, T, Alloc, Compare>
             tree;
         allocator_type _allocator;
 
@@ -111,23 +115,6 @@ namespace ft
             tree.clean_tree();
         }
 
-        /*----------------[ END OF CONSTRUCTORS ]----------------*/
-
-        void insert(const value_type &val)
-        {
-            tree.insert(val);
-        }
-
-        void remove(const key_type &k)
-        {
-            tree.remove(k);
-        }
-
-        void print_tree()
-        {
-            tree.print_tree();
-        }
-
         /*----------------[ ITERATOR FUNCTIONS ]----------------*/
 
         // Returns an iterator referring to the first element in the map container.
@@ -156,7 +143,47 @@ namespace ft
             return it;
         }
 
+        //Returns a reverse iterator pointing to the last element in the container (i.e., its reverse beginning).
+        reverse_iterator rbegin()
+        {
+            return reverse_iterator(this->end());
+        }
+
+        const_reverse_iterator rbegin() const
+        {
+            return const_reverse_iterator(this->end());
+        }
+
+        // Returns a reverse iterator pointing to the theoretical element right before the first element in the map container (which is considered its reverse end).
+
+        reverse_iterator rend()
+        {
+            return reverse_iterator(this->begin());
+        }
+
+        const_reverse_iterator rend() const
+        {
+            return const_reverse_iterator(this->begin());
+        }
+
         /*----------------[ END OF ITERATOR FUNCTIONS ]----------------*/
+
+        /*----------------[ END OF CONSTRUCTORS ]----------------*/
+
+        void insert(const value_type &val)
+        {
+            tree.insert(val);
+        }
+
+        void remove(const key_type &k)
+        {
+            tree.remove(k);
+        }
+
+        void print_tree()
+        {
+            tree.print_tree();
+        }
 
         /*----------------[ CAPACITY FUNCTIONS ]----------------*/
 
@@ -164,6 +191,18 @@ namespace ft
         size_type size() const
         {
             return tree.get_size();
+        }
+
+        bool empty() const
+        {
+            return (tree.get_size() == 0) ? true : false;
+        }
+
+        size_type max_size() const
+        {
+            size_t maxvalue = std::numeric_limits<size_t>::max();
+            size_type res = maxvalue / sizeof(mapped_type);
+            return res / 10;
         }
 
         /*----------------[ END OF CAPACITY FUNCTIONS ]----------------*/

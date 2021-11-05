@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 10:52:45 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/11/05 12:16:11 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/11/05 13:27:22 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,13 @@
 
 namespace ft
 {
-    template <class Key, class T>
-    class map_iterator : public ft::iterator<std::bidirectional_iterator_tag, T>
+    template <class Pair>
+    class map_iterator : public ft::iterator<std::bidirectional_iterator_tag, Pair>
     {
-        typedef ft::Node<Key, T> node_type;
-        typedef ft::pair<const Key, T> value_type;
-        typedef typename ft::iterator<std::bidirectional_iterator_tag, T>::pointer pointer;
-        typedef typename ft::iterator<std::bidirectional_iterator_tag, T>::difference_type difference_type;
+    public:
+        typedef ft::Node<Pair> node_type;
+        typedef Pair value_type;
+        typedef Pair *pointer;
 
     private:
         node_type *_node;
@@ -93,7 +93,7 @@ namespace ft
             return *this->_node->data;
         }
 
-        value_type *operator->()
+        pointer operator->()
         {
             return this->_node->data;
         }

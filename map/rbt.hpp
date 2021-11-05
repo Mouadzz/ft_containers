@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 15:59:33 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/11/05 12:16:25 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/11/05 13:27:23 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,10 @@
 
 namespace ft
 {
-    template <class Key,
-              class T>
+    template <class Pair>
     struct Node
     {
-        typedef ft::pair<const Key, T> value_type;
+        typedef Pair value_type;
         value_type *data;
         Node *parent;
         Node *left;
@@ -30,19 +29,20 @@ namespace ft
         int isdb;
     };
 
-    template <class Key,
+    template <class Pair,
+              class Key,
               class T,
               class Alloc,
               class Compare>
     class RBT
     {
     public:
-        typedef ft::pair<const Key, T> value_type;
-        typedef ft::Node<Key, T> node_type;
+        typedef Pair value_type;
+        typedef ft::Node<Pair> node_type;
         typedef Key key_type;
         typedef Alloc allocator_type;
         typedef Compare key_compare;
-        typedef typename Alloc::template rebind<ft::Node<Key, T> >::other allocator_other_type;
+        typedef typename Alloc::template rebind<ft::Node<Pair> >::other allocator_other_type;
 
     private:
         node_type *_root;
