@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 10:52:45 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/11/04 17:14:42 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/11/05 10:26:24 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ namespace ft
 
     private:
         node_type *_node;
+        node_type *_before_end;
 
         node_type *get_successor(node_type *node)
         {
@@ -58,6 +59,12 @@ namespace ft
         map_iterator(node_type *node)
         {
             this->_node = node;
+        }
+
+        map_iterator(node_type *before, node_type *end)
+        {
+            this->_node = end;
+            this->_before_end = before;
         }
 
         map_iterator(map_iterator const &copy)
@@ -94,7 +101,9 @@ namespace ft
         map_iterator operator++(int)
         {
             map_iterator tmp(*this);
-            node_type *ret = get_successor(this->_node->right);
+            node_type *ret = NULL;
+            if (this->_node)
+                ret = get_successor(this->_node->right);
             if (ret)
                 this->_node = ret;
             else if (this->_node)
@@ -114,7 +123,9 @@ namespace ft
 
         map_iterator &operator++()
         {
-            node_type *ret = get_successor(this->_node->right);
+            node_type *ret = NULL;
+            if (this->_node)
+                ret = get_successor(this->_node->right);
             if (ret)
                 this->_node = ret;
             else if (this->_node)
@@ -132,18 +143,60 @@ namespace ft
             return *this;
         }
 
-        // map_iterator operator--(int)
-        // {
-        //     map_iterator tmp(*this);
-        //     --this->_it;
-        //     return tmp;
-        // }
+        map_iterator operator--(int)
+        {
+            map_iterator tmp(*this);
+            node_type *ret = NULL;
+            if (this->_node)
+                ret = get_predecessor(this->_node->left);
+            if (ret)
+                this->_node = ret;
+            else
+            {
+                if (this->_node && this->_node->isleft)
+                {
+                    while (this->_node && this->_node->isleft)
+                        this->_node = this->_node->parent;
+                    if (this->_node)
+                        this->_node = this->_node->parent;
+                }
+                else
+                {
+                    if (this->_node && this->_node->parent)
+                        this->_node = this->_node->parent;
+                    else
+                        this->_node = this->_before_end;
+                }
+            }
+            return tmp;
+        }
 
-        // map_iterator &operator--()
-        // {
-        //     --this->_it;
-        //     return *this;
-        // }
+        map_iterator &operator--()
+        {
+            node_type *ret = NULL;
+            if (this->_node)
+                ret = get_predecessor(this->_node->left);
+            if (ret)
+                this->_node = ret;
+            else
+            {
+                if (this->_node && this->_node->isleft)
+                {
+                    while (this->_node && this->_node->isleft)
+                        this->_node = this->_node->parent;
+                    if (this->_node)
+                        this->_node = this->_node->parent;
+                }
+                else
+                {
+                    if (this->_node && this->_node->parent)
+                        this->_node = this->_node->parent;
+                    else
+                        this->_node = this->_before_end;
+                }
+            }
+            return *this;
+        }
 
         ~map_iterator() {}
     };

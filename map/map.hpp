@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 15:06:14 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/11/04 17:08:34 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/11/05 10:22:13 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ namespace ft
         {
             while (first != last)
             {
-               
             }
         }
 
@@ -95,13 +94,13 @@ namespace ft
         // Returns an iterator referring to the past-the-end element in the map container.
         iterator end()
         {
-            iterator it(tree.rightmost()->right);
+            iterator it(tree.rightmost(), tree.rightmost()->right);
             return it;
         }
 
         const_iterator end() const
         {
-            const_iterator it(tree.rightmost()->right);
+            const_iterator it(tree.rightmost(), tree.rightmost()->right);
             return it;
         }
 

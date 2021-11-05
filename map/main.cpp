@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 10:43:53 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/11/04 16:59:31 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/11/05 10:33:38 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,6 @@ int main()
     {
         first.insert(ft::make_pair(i, i + 43));
     }
-
-    // ft::map<char, int> second(first.begin(), first.end());
 
     ft::map<int, int>::iterator it = first.begin();
 
