@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 15:06:14 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/11/05 16:39:34 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/11/05 20:40:46 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,13 +134,17 @@ namespace ft
         // Returns an iterator referring to the past-the-end element in the map container.
         iterator end()
         {
-            iterator it(tree.rightmost(), tree.rightmost()->right);
+            typedef typename ft::RBT<value_type, Key, T, Alloc, Compare>::node_type node_type;
+            node_type *ret = tree.rightmost();
+            iterator it(ret, (ret != NULL) ? ret->right : ret);
             return it;
         }
 
         const_iterator end() const
         {
-            const_iterator it(tree.rightmost(), tree.rightmost()->right);
+            typedef typename ft::RBT<value_type, Key, T, Alloc, Compare>::node_type node_type;
+            node_type *ret = tree.rightmost();
+            const_iterator it(ret, (ret != NULL) ? ret->right : ret);
             return it;
         }
 
@@ -193,28 +197,43 @@ namespace ft
 
         /*----------------[ ELEMENT ACCESS ]----------------*/
 
-        //  If k matches the key of an element in the container, the function returns a reference to its mapped value.
-        // mapped_type &operator[](const key_type &k)
-        // {
-        //     typedef typename ft::RBT<value_type, Key, T, Alloc, Compare>::node_type node_type;
-        //     node_type *ret = tree.search_node(k);
-        //     if (ret)
-        //     {
-        //         std::cout << "Found\n";
-        //         return ret->data->second;
-        //     }
-        //     else
-        //     {
-
-        //     }
-        // }
+        // If k matches the key of an element in the container, the function returns a reference to its mapped value.
+        mapped_type &operator[](const key_type &k)
+        {
+            typedef typename ft::RBT<value_type, Key, T, Alloc, Compare>::node_type node_type;
+            node_type *ret = tree.search_node(k);
+            if (ret)
+                return ret->data->second;
+            else
+                return ((*((this->insert(ft::make_pair(k, mapped_type()))).first)).second);
+        }
 
         /*----------------[ END OF ELEMENT ACCESS ]----------------*/
+
+        /*----------------[ MODIFIERS ]----------------*/
 
         ft::pair<iterator, bool> insert(const value_type &val)
         {
             return (tree.insert(val));
         }
+
+        iterator insert(iterator position, const value_type &val)
+        {
+            ft::pair<iterator, bool> ret = this->insert(val);
+            return ret.first;
+        }
+
+        template <class InputIterator>
+        void insert(InputIterator first, InputIterator last)
+        {
+            while (first != last)
+            {
+                tree.help_insert(*first);
+                first++;
+            }
+        }
+
+        /*----------------[ END OF  MODIFIERS ]----------------*/
 
         void remove(const key_type &k)
         {

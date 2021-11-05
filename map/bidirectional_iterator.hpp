@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 10:52:45 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/11/05 16:38:54 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/11/05 19:53:33 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,12 @@ namespace ft
         }
 
     public:
-        map_iterator() : _node(NULL) {}
+        map_iterator() : _node(NULL), _before_end(NULL) {}
 
         map_iterator(node_type *node)
         {
             this->_node = node;
+            this->_before_end = NULL;
         }
 
         map_iterator(node_type *before, node_type *end)
@@ -75,6 +76,7 @@ namespace ft
         map_iterator &operator=(map_iterator const &copy)
         {
             this->_node = copy._node;
+            this->_before_end = copy._before_end;
             return *this;
         }
 

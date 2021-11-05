@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 15:59:33 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/11/05 16:45:11 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/11/05 19:42:08 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -677,21 +677,21 @@ namespace ft
 
         ft::pair<iterator, bool> insert(const value_type &val)
         {
-            bool already_exist = false;
+            bool not_in_tree = false;
             iterator ret_it;
             node_type *res = search_node(val.first);
             if (!res)
             {
                 ret_it = help_insert(val);
-                already_exist = true;
+                not_in_tree = true;
             }
             else
             {
                 iterator tmp(res);
                 ret_it = tmp;
-                already_exist = false;
+                not_in_tree = false;
             }
-            return ft::make_pair(ret_it, already_exist);
+            return ft::make_pair(ret_it, not_in_tree);
         }
 
         void remove(const key_type &k)
