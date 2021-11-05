@@ -1,30 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   node.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/04 10:43:53 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/11/05 16:45:24 by mlasrite         ###   ########.fr       */
+/*   Created: 2021/11/05 16:38:20 by mlasrite          #+#    #+#             */
+/*   Updated: 2021/11/05 16:39:16 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <iostream>
-#include <map>
-#include "map.hpp"
-
-int main()
+#pragma once
+namespace ft
 {
-    ft::map<char, int> mymap;
-
-    mymap.insert(ft::make_pair('a', 3232));
-
-    ft::pair<ft::map<char, int>::iterator, bool> ret;
-
-    ret = mymap.insert(ft::make_pair('a', 10));
-
-    std::cout << ret.first->first << " " << ret.second << std::endl;
-
-    return 0;
+    template <class Pair>
+    struct Node
+    {
+        typedef Pair value_type;
+        value_type *data;
+        Node *parent;
+        Node *left;
+        Node *right;
+        int isleft;
+        int color;
+        int isdb;
+    };
 }

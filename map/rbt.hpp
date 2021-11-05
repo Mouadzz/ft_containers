@@ -6,29 +6,18 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 15:59:33 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/11/05 13:27:23 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/11/05 16:45:11 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 #include "map.hpp"
 #include "../utils/utils.hpp"
+#include "bidirectional_iterator.hpp"
+#include "node.hpp"
 
 namespace ft
 {
-    template <class Pair>
-    struct Node
-    {
-        typedef Pair value_type;
-        value_type *data;
-        Node *parent;
-        Node *left;
-        Node *right;
-        int isleft;
-        int color;
-        int isdb;
-    };
-
     template <class Pair,
               class Key,
               class T,
@@ -42,6 +31,7 @@ namespace ft
         typedef Key key_type;
         typedef Alloc allocator_type;
         typedef Compare key_compare;
+        typedef ft::map_iterator<value_type> iterator;
         typedef typename Alloc::template rebind<ft::Node<Pair> >::other allocator_other_type;
 
     private:
@@ -655,19 +645,25 @@ namespace ft
             }
         }
 
-        void insert(const value_type &val)
+        iterator help_insert(const value_type &val)
         {
+            iterator ret_it;
             // check if tree is empty
             if (!this->_root)
             {
                 // create new node and make it our route
                 this->_root = this->create_new_node(val);
+                iterator tmp(this->_root);
+                ret_it = tmp;
                 len++;
             }
             else
             {
                 // create new node
                 node_type *new_node = this->create_new_node(val);
+
+                iterator tmp(new_node);
+                ret_it = tmp;
 
                 // all new nodes added are red
                 new_node->color = 1;
@@ -676,6 +672,26 @@ namespace ft
                 add_new_node(this->_root, new_node);
                 len++;
             }
+            return ret_it;
+        }
+
+        ft::pair<iterator, bool> insert(const value_type &val)
+        {
+            bool already_exist = false;
+            iterator ret_it;
+            node_type *res = search_node(val.first);
+            if (!res)
+            {
+                ret_it = help_insert(val);
+                already_exist = true;
+            }
+            else
+            {
+                iterator tmp(res);
+                ret_it = tmp;
+                already_exist = false;
+            }
+            return ft::make_pair(ret_it, already_exist);
         }
 
         void remove(const key_type &k)

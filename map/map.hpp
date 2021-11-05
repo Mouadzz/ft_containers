@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 15:06:14 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/11/05 13:28:37 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/11/05 16:39:34 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ namespace ft
         {
             while (first != last)
             {
-                tree.insert(*first);
+                tree.help_insert(*first);
                 first++;
             }
         }
@@ -102,7 +102,7 @@ namespace ft
                 iterator end(x.tree.rightmost(), x.tree.rightmost()->right);
                 while (begin != end)
                 {
-                    tree.insert(*begin);
+                    tree.help_insert(*begin);
                     begin++;
                 }
             }
@@ -114,6 +114,7 @@ namespace ft
         {
             tree.clean_tree();
         }
+        /*----------------[ END OF CONSTRUCTORS ]----------------*/
 
         /*----------------[ ITERATOR FUNCTIONS ]----------------*/
 
@@ -168,23 +169,6 @@ namespace ft
 
         /*----------------[ END OF ITERATOR FUNCTIONS ]----------------*/
 
-        /*----------------[ END OF CONSTRUCTORS ]----------------*/
-
-        void insert(const value_type &val)
-        {
-            tree.insert(val);
-        }
-
-        void remove(const key_type &k)
-        {
-            tree.remove(k);
-        }
-
-        void print_tree()
-        {
-            tree.print_tree();
-        }
-
         /*----------------[ CAPACITY FUNCTIONS ]----------------*/
 
         // Returns the number of elements in the map container.
@@ -206,5 +190,40 @@ namespace ft
         }
 
         /*----------------[ END OF CAPACITY FUNCTIONS ]----------------*/
+
+        /*----------------[ ELEMENT ACCESS ]----------------*/
+
+        //  If k matches the key of an element in the container, the function returns a reference to its mapped value.
+        // mapped_type &operator[](const key_type &k)
+        // {
+        //     typedef typename ft::RBT<value_type, Key, T, Alloc, Compare>::node_type node_type;
+        //     node_type *ret = tree.search_node(k);
+        //     if (ret)
+        //     {
+        //         std::cout << "Found\n";
+        //         return ret->data->second;
+        //     }
+        //     else
+        //     {
+
+        //     }
+        // }
+
+        /*----------------[ END OF ELEMENT ACCESS ]----------------*/
+
+        ft::pair<iterator, bool> insert(const value_type &val)
+        {
+            return (tree.insert(val));
+        }
+
+        void remove(const key_type &k)
+        {
+            tree.remove(k);
+        }
+
+        void print_tree()
+        {
+            tree.print_tree();
+        }
     };
 }
