@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 15:59:33 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/11/05 12:02:12 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/11/05 12:16:25 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -639,7 +639,7 @@ namespace ft
         }
 
     public:
-        RBT() : _root(NULL) {}
+        RBT() : _root(NULL), len(0) {}
         ~RBT()
         {
             clean_tree();
@@ -647,8 +647,12 @@ namespace ft
 
         void clean_tree()
         {
-            clean_tree_helper(this->_root);
-            this->_root = NULL;
+            if (this->_root)
+            {
+                clean_tree_helper(this->_root);
+                this->_root = NULL;
+                this->len = 0;
+            }
         }
 
         void insert(const value_type &val)
@@ -696,7 +700,7 @@ namespace ft
             return NULL;
         }
 
-        size_t get_size()
+        size_t get_size() const
         {
             return this->len;
         }

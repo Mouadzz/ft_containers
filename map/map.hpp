@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 15:06:14 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/11/05 12:02:14 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/11/05 12:13:30 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,14 +85,24 @@ namespace ft
 
         map(const map &x)
         {
+            *this = x;
+        }
+
+        map &operator=(const map &x)
+        {
             tree.clean_tree();
-            iterator begin(x.tree.leftmost());
-            iterator end(x.tree.rightmost(), x.tree.rightmost()->right);
-            while (begin != end)
+
+            if (x.size() > 0)
             {
-                tree.insert(*begin);
-                begin++;
+                iterator begin(x.tree.leftmost());
+                iterator end(x.tree.rightmost(), x.tree.rightmost()->right);
+                while (begin != end)
+                {
+                    tree.insert(*begin);
+                    begin++;
+                }
             }
+            return *this;
         }
 
         // Destroys the container object.
@@ -147,5 +157,15 @@ namespace ft
         }
 
         /*----------------[ END OF ITERATOR FUNCTIONS ]----------------*/
+
+        /*----------------[ CAPACITY FUNCTIONS ]----------------*/
+
+        // Returns the number of elements in the map container.
+        size_type size() const
+        {
+            return tree.get_size();
+        }
+
+        /*----------------[ END OF CAPACITY FUNCTIONS ]----------------*/
     };
 }
