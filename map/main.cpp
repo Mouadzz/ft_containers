@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 10:43:53 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/11/06 18:28:24 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/11/06 21:24:01 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -2248,9 +2248,9 @@ int main()
   // TEST_CASE(testElementAccess);
   // std::cout << std::endl;
 
-  // std::cout << YELLOW << "Testing Modifiers Methods;" << RESET << std::endl;
-  // TEST_CASE(testModifiers)
-  // std::cout << std::endl;
+  std::cout << YELLOW << "Testing Modifiers Methods;" << RESET << std::endl;
+  TEST_CASE(testModifiers)
+  std::cout << std::endl;
 
   // std::cout << YELLOW << "Testing Observers Methods;" << RESET << std::endl;
   // TEST_CASE(testObservers)
@@ -2271,53 +2271,5 @@ int main()
   // std::cout << YELLOW << "Testing Non-Member Swap  ; " << RESET << std::endl;
   // TEST_CASE(testNonMemberSwap);
   // std::cout << std::endl;
-  bool cond(true);
-  std::map<char, int> m;
-  ft::Map<char, int> ft_m;
-  std::map<char, int>::iterator it;
-  ft::Map<char, int>::iterator ft_it;
-
-  // insert some values:
-  ft_m['a'] = 10;
-  ft_m['b'] = 20;
-  ft_m['c'] = 30;
-  ft_m['d'] = 40;
-  ft_m['e'] = 50;
-  ft_m['f'] = 60;
-
-  m['a'] = 10;
-  m['b'] = 20;
-  m['c'] = 30;
-  m['d'] = 40;
-  m['e'] = 50;
-  m['f'] = 60;
-
-  cond = m.size() == ft_m.size() && compareMaps(m.begin(), m.end(), ft_m.begin(), ft_m.end());
-
-  it = m.find('b');
-  ft_it = ft_m.find('b');
-
-  cond = cond && (it->first == ft_it->first) && (it->second == ft_it->second);
-  m.erase(it);       // erasing by iterator
-  ft_m.erase(ft_it); // erasing by iterator
-
-  cond = cond && compareMaps(m.begin(), m.end(), ft_m.begin(), ft_m.end());
-
-  int ret = m.erase('c');       // erasing by key
-  int ft_ret = ft_m.erase('c'); // erasing by key
-
-  cond = cond && ret == ft_ret && compareMaps(m.begin(), m.end(), ft_m.begin(), ft_m.end());
-
-  it = m.find('e');
-  ft_it = ft_m.find('e');
-
-  cond = cond && (it->first == ft_it->first) && (it->second == ft_it->second) && m.size() == ft_m.size();
-
-  std::cout << cond << std::endl;
-  // m.erase(it, m.end());          // erasing by range
-  // ft_m.erase(ft_it, ft_m.end()); // erasing by range
-
-  // cond = cond && m.empty() == ft_m.empty() && compareMaps(m.begin(), m.end(), ft_m.begin(), ft_m.end());
-
   return 0;
 }

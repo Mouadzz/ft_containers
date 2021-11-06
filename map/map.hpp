@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 15:06:14 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/11/06 18:21:44 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/11/06 21:28:52 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <math.h>
 #include "bidirectional_iterator.hpp"
 #include "../utils/reverse_iterator.hpp"
+#include "../vector/vector.hpp"
 
 namespace ft
 {
@@ -250,16 +251,30 @@ namespace ft
 
         size_type erase(const key_type &k)
         {
-            this->_tree.remove(k);
-            return 1;
+            typedef typename ft::RBT<value_type, Key, T, Alloc, Compare>::node_type node_type;
+
+            node_type *ret = _tree.search_node(k);
+            if (ret)
+            {
+                this->_tree.remove(k);
+                return 1;
+            }
+            return 0;
         }
 
         void erase(iterator first, iterator last)
         {
+            ft::Vector<Key> _arr;
             while (first != last)
             {
-                this->_tree.remove(first->first);
+                _arr.push_back(first->first);
                 first++;
+            }
+            int i = 0;
+            while (i < _arr.size())
+            {
+                this->erase(_arr[i]);
+                i++;
             }
         }
 
@@ -270,6 +285,14 @@ namespace ft
             node_type *tmp = x._tree.get_root();
             x._tree.set_root(this->_tree.get_root());
             this->_tree.set_root(tmp);
+
+            allocator_type _allo_tmp = x._allocator;
+            x._allocator = this->_allocator;
+            this->_allocator = _allo_tmp;
+
+            key_compare _kcomp_tmp = x._kcomp;
+            x._kcomp = this->_kcomp;
+            this->_kcomp = _kcomp_tmp;
         }
 
         void clear()

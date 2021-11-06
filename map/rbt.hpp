@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 15:59:33 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/11/06 18:11:12 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/11/06 20:25:36 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -717,8 +717,10 @@ namespace ft
         {
             node_type *node = search_node(k);
             if (node != NULL)
+            {
                 remove_helper(node);
-            len--;
+                len--;
+            }
         }
 
         node_type *leftmost() const
