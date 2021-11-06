@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/04 10:52:45 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/11/05 19:53:33 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/11/06 17:35:47 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ namespace ft
     private:
         node_type *_node;
         node_type *_before_end;
+        node_type *_before_rend;
 
         node_type *get_successor(node_type *node)
         {
@@ -54,18 +55,30 @@ namespace ft
         }
 
     public:
-        map_iterator() : _node(NULL), _before_end(NULL) {}
+        map_iterator() : _node(NULL), _before_end(NULL), _before_rend(NULL) {}
 
         map_iterator(node_type *node)
         {
             this->_node = node;
             this->_before_end = NULL;
+            this->_before_rend = NULL;
+        }
+
+        map_iterator(node_type *begin, node_type *before, bool diff)
+        {
+            if (diff)
+            {
+                this->_node = begin;
+                this->_before_rend = before;
+                this->_before_end = NULL;
+            }
         }
 
         map_iterator(node_type *before, node_type *end)
         {
             this->_node = end;
             this->_before_end = before;
+            this->_before_rend = NULL;
         }
 
         map_iterator(map_iterator const &copy)
@@ -77,6 +90,7 @@ namespace ft
         {
             this->_node = copy._node;
             this->_before_end = copy._before_end;
+            this->_before_rend = copy._before_rend;
             return *this;
         }
 
@@ -95,7 +109,7 @@ namespace ft
             return *this->_node->data;
         }
 
-        pointer operator->()
+        pointer operator->() const
         {
             return this->_node->data;
         }
@@ -104,13 +118,19 @@ namespace ft
         {
             map_iterator tmp(*this);
             node_type *ret = NULL;
+            if (this->_before_rend)
+            {
+                this->_node = this->_before_rend;
+                this->_before_rend = NULL;
+                return tmp;
+            }
             if (this->_node)
                 ret = get_successor(this->_node->right);
             if (ret)
                 this->_node = ret;
             else if (this->_node)
             {
-                if (this->_node->isleft)
+                if (this->_node && this->_node->isleft)
                     this->_node = this->_node->parent;
                 else
                 {
@@ -126,13 +146,19 @@ namespace ft
         map_iterator &operator++()
         {
             node_type *ret = NULL;
+            if (this->_before_rend)
+            {
+                this->_node = this->_before_rend;
+                this->_before_rend = NULL;
+                return *this;
+            }
             if (this->_node)
                 ret = get_successor(this->_node->right);
             if (ret)
                 this->_node = ret;
             else if (this->_node)
             {
-                if (this->_node->isleft)
+                if (this->_node && this->_node->isleft)
                     this->_node = this->_node->parent;
                 else
                 {

@@ -6,12 +6,12 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/21 12:01:43 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/11/04 10:36:25 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/11/05 13:27:18 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
-#include "../utils/iterator_traits.hpp"
+#include "iterator_traits.hpp"
 
 namespace ft
 {
@@ -44,17 +44,17 @@ namespace ft
         }
 
         template <typename riter>
-        reverse_iterator(reverse_iterator<riter> const& rit)
+        reverse_iterator(reverse_iterator<riter> const &rit)
         {
             _rit = --rit.base();
         }
-        
+
         iterator_type base() const
         {
             iterator_type tmp = this->_rit;
             return ++tmp;
         }
-        
+
         reference operator*() const
         {
             return *_rit;

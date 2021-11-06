@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/05 11:01:38 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/11/04 11:08:15 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/11/05 12:44:01 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <iostream>
 #include "random_access_iterator.hpp"
 #include "../utils/utils.hpp"
-#include "reverse_iterator.hpp"
+#include "../utils/reverse_iterator.hpp"
 #include <limits>
 
 namespace ft
@@ -64,7 +64,7 @@ namespace ft
             this->_allocator = alloc;
             int range = last - first;
             if (range < 0)
-                throw std::length_error("Size requested is negative or  greater than the maximum size !");
+                throw std::length_error("Size requested is negative secondor  greater than the maximum size !");
             else
             {
                 this->_capacity = range;
@@ -261,16 +261,12 @@ namespace ft
         {
             if (n < this->_size)
                 return this->_arr[n];
-            else
-                throw std::out_of_range("Index out of range !");
         }
 
         const_reference operator[](size_type n) const
         {
             if (n < this->_size)
                 return this->_arr[n];
-            else
-                throw std::out_of_range("Index out of range !");
         }
 
         // Returns a reference to the element at position n in the Vector.
