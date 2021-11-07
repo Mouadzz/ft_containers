@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 15:06:14 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/11/06 21:28:52 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/11/07 13:43:39 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -293,6 +293,10 @@ namespace ft
             key_compare _kcomp_tmp = x._kcomp;
             x._kcomp = this->_kcomp;
             this->_kcomp = _kcomp_tmp;
+
+            size_t size_tmp = x.size();
+            x._tree.set_size(this->size());
+            this->_tree.set_size(size_tmp);
         }
 
         void clear()
@@ -393,6 +397,11 @@ namespace ft
                 tmp++;
                 return tmp;
             }
+            if (save)
+            {
+                iterator tmp(save);
+                return tmp;
+            }
             return this->end();
         }
 
@@ -405,6 +414,11 @@ namespace ft
             {
                 const_iterator tmp(ret);
                 tmp++;
+                return tmp;
+            }
+            if (save)
+            {
+                const_iterator tmp(save);
                 return tmp;
             }
             return this->end();

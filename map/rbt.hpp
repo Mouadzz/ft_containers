@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 15:59:33 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/11/06 20:25:36 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/11/07 13:24:10 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -632,16 +632,14 @@ namespace ft
         {
             if (node == NULL)
                 return NULL;
-            save[0] = NULL;
-
             if (ft::my_compare(node->data->first, k, key_compare()) == 0 && !(!ft::my_compare(k, node->data->first, key_compare()) && !ft::my_compare(node->data->first, k, key_compare())))
                 save[0] = node;
             if (!ft::my_compare(k, node->data->first, key_compare()) && !ft::my_compare(node->data->first, k, key_compare()))
                 return node;
             else if (ft::my_compare(k, node->data->first, key_compare()) == 1)
-                return search_node_helper(node->left, k);
+                return lower_bound_helper(node->left, k, save);
             else
-                return search_node_helper(node->right, k);
+                return lower_bound_helper(node->right, k, save);
         }
 
     public:
@@ -740,6 +738,11 @@ namespace ft
         size_t get_size() const
         {
             return this->len;
+        }
+
+        void set_size(size_t size)
+        {
+            this->len = size;
         }
 
         node_type *search_node(const key_type &k) const
