@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 15:06:14 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/11/07 13:43:39 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/11/07 14:28:50 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,6 +230,7 @@ namespace ft
 
         iterator insert(iterator position, const value_type &val)
         {
+            (void)position;
             ft::pair<iterator, bool> ret = this->insert(val);
             return ret.first;
         }
@@ -270,7 +271,7 @@ namespace ft
                 _arr.push_back(first->first);
                 first++;
             }
-            int i = 0;
+            size_t i = 0;
             while (i < _arr.size())
             {
                 this->erase(_arr[i]);
