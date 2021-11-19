@@ -6,7 +6,7 @@
 /*   By: mlasrite <mlasrite@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/05 11:01:38 by mlasrite          #+#    #+#             */
-/*   Updated: 2021/11/05 12:44:01 by mlasrite         ###   ########.fr       */
+/*   Updated: 2021/11/19 16:51:33 by mlasrite         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ namespace ft
             this->_size = n;
             this->_arr = this->_allocator.allocate(n);
             for (size_t i = 0; i < n; i++)
-                _arr[i] = val;
+                this->_allocator.construct(_arr + i, val);
         }
 
         template <class InputIterator>
@@ -64,7 +64,7 @@ namespace ft
             this->_allocator = alloc;
             int range = last - first;
             if (range < 0)
-                throw std::length_error("Size requested is negative secondor  greater than the maximum size !");
+                throw std::length_error("Size requested is negative or  greater than the maximum size !");
             else
             {
                 this->_capacity = range;
@@ -92,7 +92,7 @@ namespace ft
 
                 this->_arr = this->_allocator.allocate(x.capacity());
                 for (size_t i = 0; i < x.size(); i++)
-                    this->_arr[i] = x[i];
+                    this->_allocator.construct(_arr + i, x[i]);
                 this->_capacity = x.capacity();
                 this->_size = x.size();
             }
@@ -101,7 +101,7 @@ namespace ft
                 for (size_t i = 0; i < this->_size; i++)
                     this->_arr[i].~value_type();
                 for (size_t i = 0; i < x.size(); i++)
-                    this->_arr[i] = x[i];
+                    this->_allocator.construct(_arr + i, x[i]);
                 this->_size = x.size();
             }
             return *this;
@@ -200,7 +200,7 @@ namespace ft
                 {
                     value_type *tmp = this->_allocator.allocate(n);
                     for (size_t i = 0; i < this->_size; i++)
-                        tmp[i] = this->_arr[i];
+                        this->_allocator.construct(tmp + i, this->_arr[i]);
 
                     for (size_t i = 0; i < this->_size; i++)
                         this->_arr[i].~value_type();
@@ -208,7 +208,7 @@ namespace ft
                         this->_allocator.deallocate(this->_arr, this->_capacity);
 
                     for (size_t i = this->_size; i < n; i++)
-                        tmp[i] = val;
+                        this->_allocator.construct(tmp + i, val);
 
                     this->_capacity = n;
                     this->_size = n;
@@ -217,7 +217,7 @@ namespace ft
                 else
                 {
                     for (size_t i = this->_size; i < n; i++)
-                        this->_arr[i] = val;
+                        this->_allocator.construct(_arr + i, val);
                     this->_size = n;
                 }
             }
@@ -244,7 +244,7 @@ namespace ft
             {
                 value_type *tmp = this->_allocator.allocate(n);
                 for (size_t i = 0; i < this->_size; i++)
-                    tmp[i] = this->_arr[i];
+                    this->_allocator.construct(tmp + i, this->_arr[i]);
                 if (this->_capacity > 0)
                     this->_allocator.deallocate(this->_arr, this->_capacity);
                 this->_arr = tmp;
@@ -261,12 +261,16 @@ namespace ft
         {
             if (n < this->_size)
                 return this->_arr[n];
+            else
+                throw std::out_of_range("Index out of range !");
         }
 
         const_reference operator[](size_type n) const
         {
             if (n < this->_size)
                 return this->_arr[n];
+            else
+                throw std::out_of_range("Index out of range !");
         }
 
         // Returns a reference to the element at position n in the Vector.
@@ -309,7 +313,8 @@ namespace ft
                     this->_allocator.deallocate(this->_arr, this->_capacity);
                 this->_arr = this->_allocator.allocate(n);
                 for (size_t i = 0; i < n; i++)
-                    this->_arr[i] = val;
+                    this->_allocator.construct(_arr + i, val);
+
                 this->_capacity = n;
                 this->_size = n;
             }
@@ -320,7 +325,7 @@ namespace ft
                     for (size_t i = 0; i < this->_size; i++)
                         this->_arr[i].~value_type();
                     for (size_t i = 0; i < n; i++)
-                        this->_arr[i] = val;
+                        this->_allocator.construct(_arr + i, val);
                     this->_size = n;
                 }
                 else
@@ -328,7 +333,7 @@ namespace ft
                     for (size_t i = 0; i < n; i++)
                         this->_arr[i].~value_type();
                     for (size_t i = 0; i < n; i++)
-                        this->_arr[i] = val;
+                        this->_allocator.construct(_arr + i, val);
                     this->_size = n;
                 }
             }
@@ -350,7 +355,7 @@ namespace ft
                     int j = 0;
                     for (InputIterator i = first; i != last; i++)
                     {
-                        this->_arr[j] = *i;
+                        this->_allocator.construct(_arr + j, *i);
                         j += 1;
                     }
                     this->_capacity = range;
@@ -365,7 +370,7 @@ namespace ft
                         int j = 0;
                         for (InputIterator i = first; i != last; i++)
                         {
-                            this->_arr[j] = *i;
+                            this->_allocator.construct(_arr + j, *i);
                             j += 1;
                         }
                         this->_size = j;
@@ -377,7 +382,7 @@ namespace ft
                         int j = 0;
                         for (InputIterator i = first; i != last; i++)
                         {
-                            this->_arr[j] = *i;
+                            this->_allocator.construct(_arr + j, *i);
                             j += 1;
                         }
                         this->_size = j;
@@ -392,10 +397,10 @@ namespace ft
             if (this->_size + 1 > this->_capacity)
             {
                 reserve((this->_capacity == 0) ? 1 : (this->_capacity * 2));
-                this->_arr[this->_size] = val;
+                this->_allocator.construct(_arr + this->_size, val);
             }
             else
-                this->_arr[this->_size] = val;
+                this->_allocator.construct(_arr + this->_size, val);
             this->_size += 1;
         }
 
@@ -441,19 +446,20 @@ namespace ft
                 size_t i = 0;
                 while (i < pos)
                 {
-                    m_tmp[i] = *m_first;
+                    this->_allocator.construct(m_tmp + i, *m_first);
                     i++;
                     m_first++;
                 }
                 for (size_t j = 0; j < range; j++)
                 {
-                    m_tmp[i] = *first;
+                    this->_allocator.construct(m_tmp + i, *first);
+
                     i++;
                     first++;
                 }
                 while (i < end)
                 {
-                    m_tmp[i] = *m_first;
+                    this->_allocator.construct(m_tmp + i, *m_first);
                     i++;
                     m_first++;
                 }
@@ -475,7 +481,7 @@ namespace ft
                         last--;
                         for (size_t i = 0; i < range; i++)
                         {
-                            *m_tmp = *last;
+                            this->_allocator.construct(&*m_tmp, *last);
                             m_tmp--;
                             last--;
                         }
@@ -490,7 +496,7 @@ namespace ft
                     last--;
                     for (size_t i = 0; i < range; i++)
                     {
-                        *m_tmp = *last;
+                        this->_allocator.construct(&*m_tmp, *last);
                         m_tmp--;
                         last--;
                     }
@@ -522,7 +528,7 @@ namespace ft
                 ret = pointer;
                 while (i + 1 < this->_size)
                 {
-                    this->_arr[i] = this->_arr[i + 1];
+                    this->_allocator.construct(this->_arr + i, this->_arr[i + 1]);
                     i += 1;
                 }
                 this->_size -= 1;
@@ -543,7 +549,7 @@ namespace ft
                 size_t i = 0;
                 while (m_first != first)
                 {
-                    tmp[i] = *m_first;
+                    this->_allocator.construct(tmp + i, *m_first);
                     i++;
                     m_first++;
                 }
@@ -553,7 +559,7 @@ namespace ft
                     m_first++;
                 while (i < newCap)
                 {
-                    tmp[i] = *m_first;
+                    this->_allocator.construct(tmp + i, *m_first);
                     i++;
                     m_first++;
                 }
@@ -635,7 +641,7 @@ namespace ft
                 size_t i = 0;
                 while (i < pos)
                 {
-                    tmp[i] = *first;
+                    this->_allocator.construct(tmp + i, *first);
                     i++;
                     first++;
                 }
@@ -643,12 +649,12 @@ namespace ft
                 ret = pointer;
                 for (size_t j = 0; j < n; j++)
                 {
-                    this->_allocator.construct(&tmp[i], val);
+                    this->_allocator.construct(tmp + i, val);
                     i++;
                 }
                 while (i < end)
                 {
-                    tmp[i] = *first;
+                    this->_allocator.construct(tmp + i, *first);
                     i++;
                     first++;
                 }
